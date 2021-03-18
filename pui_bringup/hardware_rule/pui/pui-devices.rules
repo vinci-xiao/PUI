@@ -1,0 +1,16 @@
+// vesc middrive
+KERNEL=="ttyACM[0-9]*", SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", ATTRS{serial}=="301", MODE="666", SYMLINK+="vesc_middrive"
+// KERNEL=="ttyACM[0-9]*", SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", ATTRS{devpath}=="1.2", MODE="666", SYMLINK+="vesc_steering"
+
+
+// //Trust camera
+// KERNEL=="video[0-9]*", SUBSYSTEMS=="usb", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="0843", ATTRS{serial}=="A6DB427F", ,MODE="666", SYMLINK+="trust_cam"
+
+// // RTK GPS
+// KERNEL=="ttyACM[0-9]*", SUBSYSTEMS=="usb", ATTRS{idVendor}=="8087", ATTRS{idProduct}=="0a9e", ATTRS{serial}=="954d717369f18f60c6beb564d7799d0b", MODE="666", SYMLINK+="rtk_gps"
+
+// xsens imu
+KERNEL=="ttyUSB[0-9]*", SUBSYSTEMS=="usb", ATTRS{idVendor}=="2639", ATTRS{idProduct}=="0300", MODE="666", ATTRS{serial}=="DB1E7E2P", SYMLINK+="pui_imu"
+
+// Robotics U2D2
+KERNEL=="ttyUSB[0-9]*", SUBSYSTEMS=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6014", ATTRS{serial}=="FT4TCUHH", MODE="666", SYMLINK+="pui_u2d2"
