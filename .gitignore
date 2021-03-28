@@ -1,0 +1,6 @@
+# user setting
+build/
+cmake_install.cmake
+Makefile
+CMakeFiles/
+.vscode/

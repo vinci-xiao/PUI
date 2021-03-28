@@ -7,7 +7,7 @@
   <arg name="use_joint_state"         default="false"/>
   <arg name="use_cmd_vel"             default="true"/>
 
-  <param name="dynamixel_info"          value="$(find pev_sensors)/config/dynamixel_wheel_2_0.yaml"/>
+  <param name="dynamixel_info"          value="$(find pui_bringup)/config/dynamixel_wheel_2_0.yaml"/>
 
   <node name="$(arg namespace)" pkg="dynamixel_workbench_controllers" type="dynamixel_workbench_controllers"
         required="true" output="screen" args="$(arg usb_port) $(arg dxl_baud_rate)">
