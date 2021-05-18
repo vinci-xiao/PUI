@@ -27,7 +27,7 @@ int main( int argc, char** argv )
     anchor_0.id = 0;
     anchor_0.type = shape;
     anchor_0.action = visualization_msgs::Marker::ADD;
-    anchor_0.pose.position.x = 0.80;
+    anchor_0.pose.position.x = 0;
     anchor_0.pose.position.y = 0;
     anchor_0.pose.position.z = 0;
     anchor_0.pose.orientation.x = 0.0;
@@ -51,8 +51,8 @@ int main( int argc, char** argv )
     anchor_1.id = 1;
     anchor_1.type = shape;
     anchor_1.action = visualization_msgs::Marker::ADD;
-    anchor_1.pose.position.x = 2.86;
-    anchor_1.pose.position.y = 1.0;
+    anchor_1.pose.position.x = 0;
+    anchor_1.pose.position.y = 3.406;
     anchor_1.pose.position.z = 0;
     anchor_1.pose.orientation.x = 0.0;
     anchor_1.pose.orientation.y = 0.0;
@@ -75,8 +75,8 @@ int main( int argc, char** argv )
     anchor_2.id = 2;
     anchor_2.type = shape;
     anchor_2.action = visualization_msgs::Marker::ADD;
-    anchor_2.pose.position.x = 0.2;
-    anchor_2.pose.position.y = 2.22;
+    anchor_2.pose.position.x = 2.95;
+    anchor_2.pose.position.y = 1.703;
     anchor_2.pose.position.z = 0;
     anchor_2.pose.orientation.x = 0.0;
     anchor_2.pose.orientation.y = 0.0;

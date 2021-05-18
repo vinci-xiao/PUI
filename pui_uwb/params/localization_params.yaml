@@ -1,0 +1,46 @@
+## Localization mode
+# Select the proper localization mode.
+# mode: 1 =  Localization in 1D environment
+#       2 =  Localization in 2D environment
+#       3 =  Localization in 3D environment
+localization_mode: 2
+
+
+# see eq.(14) in document "Annex_IV_Accuracy Analysis"
+# standard deviation of TDOA measurement
+sig_c: 0.0625
+
+
+# Refreshing rate of publisher/subscriber, rosrate.
+rate: 5  # Hz
+
+
+## Upright axes
+# If mode selected as 2D, upright axes(Tz) will be unchangeable.
+tag_z: 0.25
+
+
+## Threshold Value
+# This value indicates the maximum distance between two positions
+# (pre- and next-position). If the distance between positions is
+# less than the threshold value, it means the tag does not move or vice versa.
+# [If the tag is moving in 2D environment, change this value rationally.]
+thr: 0.08   # m/s
+
+
+# KPI Period in seconds and nanoseconds
+period_sec: 60
+period_nsec: 0
+
+# Start position of tag
+initial_Tx: 2.5
+initial_Ty: 1.0
+initial_Tz: 0.25
+
+# Positions of Anchors which is user-difined
+# anchor0:  [0.0, 0.0, 0.25]
+# anchor1:  [0.0, 3.406, 0.25]
+# anchor2:  [2.95, 1.703, 0.25]
+anchor2_d:  0.60 
+anchor3_i:  0.5196  
+anchor3_j:  0.30
