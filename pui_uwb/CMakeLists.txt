@@ -14,6 +14,9 @@ find_package(catkin REQUIRED COMPONENTS
   pui_msgs
 )
 
+find_package(cmake_modules REQUIRED)
+find_package(Eigen3 REQUIRED)
+
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -119,7 +122,10 @@ catkin_package(
 include_directories(
 # include
   ${catkin_INCLUDE_DIRS}
+  ${EIGEN3_INCLUDE_DIR} 
 )
+
+add_definitions(${EIGEN_DEFINITIONS})
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
@@ -138,6 +144,10 @@ add_dependencies(talker pui_msgs_generate_messages_cpp)
 add_executable(trilateration src/trilateration.cpp)
 target_link_libraries(trilateration ${catkin_LIBRARIES})
 add_dependencies(trilateration pui_msgs_generate_messages_cpp)
+
+add_executable(try_eigen src/try_eigen.cpp)
+target_link_libraries(try_eigen ${catkin_LIBRARIES})
+add_dependencies(try_eigen pui_msgs_generate_messages_cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
