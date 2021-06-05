@@ -209,10 +209,8 @@ include_directories(
 
 add_executable(uwb_xinyi src/uwb_xinyi.cpp)
 add_executable(tag_marker src/tag_marker.cpp)
-add_executable(tag_odom src/tag_odom.cpp)
 add_executable(tag_path src/tag_path.cpp)
 
 target_link_libraries(uwb_xinyi ${catkin_LIBRARIES})
 target_link_libraries(tag_marker ${catkin_LIBRARIES})
-target_link_libraries(tag_odom ${catkin_LIBRARIES})
 target_link_libraries(tag_path ${catkin_LIBRARIES})
