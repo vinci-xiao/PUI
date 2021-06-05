@@ -1,6 +1,7 @@
 <launch>
     <arg name="map_file" default="/home/vincy/map/hector_fixed.yaml"/>
     <arg name="bag_file" value="/home/vincy/bags/pui_bag/rectangle.bag"/>
+    <!-- <arg name="bag_file" value="/home/vincy/bags/pui_bag/first_overlap.bag"/> -->
 
     <!-- <param name="/use_sim_time" value="true"> -->
     <!-- rosparam set /use_sim_time true -->
@@ -21,7 +22,8 @@
     <node pkg="tf" type="static_transform_publisher" name="map_velodyne_broadcaster" args="0 0 0.5 0 0 0 map velodyne_link 100" />
 
     <!-- compute tag location -->
-    <node pkg="pui_uwb" type="trilateration" name="trilateration" output="screen"/>
+    <!-- <node pkg="pui_uwb" type="trilateration" name="trilateration" output="screen"/> -->
+    <node pkg="pui_uwb" type="try_eigen" name="try_eigen" output="screen"/>
 
     <!-- tag_marker -->
     <node pkg="pui_markers" type="tag_marker" name="tag_marker" output="screen"/>
