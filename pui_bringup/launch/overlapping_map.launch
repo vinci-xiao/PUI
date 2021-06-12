@@ -1,18 +1,18 @@
 <launch>
     <arg name="is_debug" default="true" />
-    <arg name="map_file" default="/home/vincy/map/hector_fixed.yaml"/>
-    <arg name="bag_file" default="/home/vincy/bags/pui_bag/first_overlap.bag"/>
+    <arg name="map_file" default="hector_fixed"/>
+    <arg name="bag_file" default="uwb_60_cir"/>
     <!-- <arg name="bag_file" default="/home/vincy/bags/pui_bag/first_overlap.bag"/> -->
 
     <!-- play rosbag and debugging -->
     <group if="$(arg is_debug)">
         <!-- rosbag & sim_time -->
         <param name="use_sim_time" value="true" />
-        <node pkg="rosbag" type="play" name="rosbag_play" output="screen" args="--loop --clock $(arg bag_file)" />
+        <node pkg="rosbag" type="play" name="rosbag_play" output="screen" args="--loop --clock $(find pui_bringup)/bag/$(arg bag_file).bag" />
     </group>
 
     <!-- map_server -->
-    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+    <node name="map_server" pkg="map_server" type="map_server" args="$(find pui_bringup)/map/$(arg map_file).yaml" />
 
     <!-- anchor_marker -->
     <node pkg="pui_markers" type="uwb_xinyi" name="uwb_xinyi" output="screen"/>
