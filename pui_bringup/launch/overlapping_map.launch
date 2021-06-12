@@ -11,7 +11,6 @@
         <node pkg="rosbag" type="play" name="rosbag_play" output="screen" args="--loop --clock $(arg bag_file)" />
     </group>
 
-
     <!-- map_server -->
     <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
