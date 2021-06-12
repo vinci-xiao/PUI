@@ -137,10 +137,6 @@ add_definitions(${EIGEN_DEFINITIONS})
 ## either from message generation or dynamic reconfigure
 # add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-add_executable(talker src/talker.cpp)
-target_link_libraries(talker ${catkin_LIBRARIES})
-add_dependencies(talker pui_msgs_generate_messages_cpp)
-
 add_executable(trilateration src/trilateration.cpp)
 target_link_libraries(trilateration ${catkin_LIBRARIES})
 add_dependencies(trilateration pui_msgs_generate_messages_cpp)

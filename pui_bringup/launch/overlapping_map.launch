@@ -1,21 +1,25 @@
 <launch>
+    <arg name="is_debug" default="true" />
     <arg name="map_file" default="/home/vincy/map/hector_fixed.yaml"/>
-    <arg name="bag_file" value="/home/vincy/bags/pui_bag/rectangle.bag"/>
-    <!-- <arg name="bag_file" value="/home/vincy/bags/pui_bag/first_overlap.bag"/> -->
+    <arg name="bag_file" default="/home/vincy/bags/pui_bag/first_overlap.bag"/>
+    <!-- <arg name="bag_file" default="/home/vincy/bags/pui_bag/first_overlap.bag"/> -->
 
-    <!-- <param name="/use_sim_time" value="true"> -->
-    <!-- rosparam set /use_sim_time true -->
-    <param name="use_sim_time" value="true" />
+    <!-- play rosbag and debugging -->
+    <group if="$(arg is_debug)">
+        <!-- rosbag & sim_time -->
+        <param name="use_sim_time" value="true" />
+        <node pkg="rosbag" type="play" name="rosbag_play" output="screen" args="--loop --clock $(arg bag_file)" />
+    </group>
 
- 
-    <!-- rosbag -->
-    <node pkg="rosbag" type="play" name="rosbag_play" output="screen" args="--loop --clock $(arg bag_file)" />
-    
+
     <!-- map_server -->
     <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
     <!-- anchor_marker -->
     <node pkg="pui_markers" type="uwb_xinyi" name="uwb_xinyi" output="screen"/>
+
+    <!-- tag_marker -->
+    <node pkg="pui_markers" type="tag_marker" name="tag_marker" output="screen"/>
 
     <!-- static_tf  -->
     <node pkg="tf" type="static_transform_publisher" name="world_map_broadcaster" args="1.52 1.68 0 0 0 -1.66 1 world map 100" />
@@ -24,9 +28,6 @@
     <!-- compute tag location -->
     <!-- <node pkg="pui_uwb" type="trilateration" name="trilateration" output="screen"/> -->
     <node pkg="pui_uwb" type="try_eigen" name="try_eigen" output="screen"/>
-
-    <!-- tag_marker -->
-    <node pkg="pui_markers" type="tag_marker" name="tag_marker" output="screen"/>
 
     <!-- rviz shows overlapping map  -->
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find pui_markers)/rviz/map_overlapping.rviz" />
