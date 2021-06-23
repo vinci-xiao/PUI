@@ -15,10 +15,12 @@ public:
 private:
     void topic_callback(geometry_msgs::msg::Pose::SharedPtr msg) 
     {
-    //   p.position.x= 1;
-    //   p.position.y= 2;
-    //   p.position.z= 3;
-      publisher_->publish(msg->position.x);
+        auto p = geometry_msgs::msg::Pose();
+        // p.position.x= 4;
+        // p.position.y= 5;
+        // p.position.z= msg->position.x;
+        p.position= msg->position;
+        publisher_->publish(p);
     }
     rclcpp::Publisher<geometry_msgs::msg::Pose>::SharedPtr publisher_;
     rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr subscription_;
