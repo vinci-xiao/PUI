@@ -37,9 +37,6 @@ endif()
 add_executable(trilateration_mse src/trilateration_mse.cpp)
 ament_target_dependencies(trilateration_mse rclcpp std_msgs geometry_msgs pui_msgs Eigen3)
 
-# add_executable(trilateration_mse src/trilateration_mse.cpp)
-# ament_target_dependencies(trilateration_mse rclcpp Eigen3 pui_msgs)
-
 install(TARGETS
   trilateration_mse
   DESTINATION lib/${PROJECT_NAME}
