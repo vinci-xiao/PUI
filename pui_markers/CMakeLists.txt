@@ -19,6 +19,10 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(visualization_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
+
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
@@ -34,11 +38,15 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-add_executable(uwb_xinyi src/uwb_xinyi.cpp)
-ament_target_dependencies(uwb_xinyi rclcpp visualization_msgs)
+add_executable(tag_path src/tag_path.cpp)
+ament_target_dependencies(tag_path rclcpp geometry_msgs std_msgs nav_msgs)
+
+add_executable(uwb_marker src/uwb_marker.cpp)
+ament_target_dependencies(uwb_marker rclcpp visualization_msgs geometry_msgs)
 
 install(TARGETS
-  uwb_xinyi
+  uwb_marker
+  tag_path
   DESTINATION lib/${PROJECT_NAME}
 )
 

@@ -2,37 +2,37 @@
 
 #include "rclcpp/rclcpp.hpp"
 #include "visualization_msgs/msg/marker.hpp"
+#include "geometry_msgs/msg/pose.hpp"
 
 using namespace std::chrono_literals;
-
-// Set our initial shape type to be a cube
-uint32_t shape = visualization_msgs::msg::Marker::CUBE;
 
 float_t uwb_dimension_x = 0.04;
 float_t uwb_dimension_y = 0.01;
 float_t uwb_dimension_z = 0.07;
 
-class XinyiUWB : public rclcpp::Node
+class MarkerUWB : public rclcpp::Node
 {
 public:
-    XinyiUWB()
-    : Node("uwb_xinyi")
+    MarkerUWB()
+    : Node("uwb_marker")
     {
         publisher_ = this->create_publisher<visualization_msgs::msg::Marker>("visualization_marker", 3);
-
+        subscription_ = this->create_subscription<geometry_msgs::msg::Pose>(
+        "tag_position", 10, std::bind(&MarkerUWB::tag_callback, this, std::placeholders::_1));
         timer_ = this->create_wall_timer(
-        500ms, std::bind(&XinyiUWB::timer_callback, this));
-
-
+        500ms, std::bind(&MarkerUWB::timer_callback, this));
     }
 private:
-    void timer_callback()
+    void anchor_setting()
     {
+        // Set our initial shape type to be a cube
+        uint32_t shape = visualization_msgs::msg::Marker::CUBE;
+
         // anchor_0
         visualization_msgs::msg::Marker anchor_0;
         anchor_0.header.frame_id = "/world";
         anchor_0.header.stamp = rclcpp::Clock().now();
-        anchor_0.ns = "uwb_xinyi";
+        anchor_0.ns = "uwb_marker";
         anchor_0.id = 0;
         anchor_0.type = shape;
         anchor_0.action = visualization_msgs::msg::Marker::ADD;
@@ -56,7 +56,7 @@ private:
         visualization_msgs::msg::Marker anchor_1;
         anchor_1.header.frame_id = "/world";
         anchor_1.header.stamp = rclcpp::Clock().now();
-        anchor_1.ns = "uwb_xinyi";
+        anchor_1.ns = "uwb_marker";
         anchor_1.id = 1;
         anchor_1.type = shape;
         anchor_1.action = visualization_msgs::msg::Marker::ADD;
@@ -80,7 +80,7 @@ private:
         visualization_msgs::msg::Marker anchor_2;
         anchor_2.header.frame_id = "/world";
         anchor_2.header.stamp = rclcpp::Clock().now();
-        anchor_2.ns = "uwb_xinyi";
+        anchor_2.ns = "uwb_marker";
         anchor_2.id = 2;
         anchor_2.type = shape;
         anchor_2.action = visualization_msgs::msg::Marker::ADD;
@@ -104,14 +104,50 @@ private:
         publisher_->publish(anchor_1);
         publisher_->publish(anchor_2);
     }
+    void tag_callback(geometry_msgs::msg::Pose::SharedPtr tag) 
+    {
+        // Set our initial shape type to be a cube
+        uint32_t shape = visualization_msgs::msg::Marker::SPHERE;
+
+        visualization_msgs::msg::Marker tag_marker;
+        tag_marker.header.frame_id = "/world";
+        tag_marker.header.stamp = rclcpp::Clock().now();
+        tag_marker.ns = "tag_mark";
+        tag_marker.id = 0;
+        tag_marker.type = shape;
+        tag_marker.action = visualization_msgs::msg::Marker::ADD;
+        tag_marker.pose.position.x = tag->position.x;
+        tag_marker.pose.position.y = tag->position.y;
+        tag_marker.pose.position.z = tag->position.z;           
+        tag_marker.pose.orientation.x = 0.0;
+        tag_marker.pose.orientation.y = 0.0;
+        tag_marker.pose.orientation.z = 0.0;
+        tag_marker.pose.orientation.w = 1.0;
+        tag_marker.scale.x = 0.15;
+        tag_marker.scale.y = 0.15;
+        tag_marker.scale.z = 0.15;
+        tag_marker.color.r = 1.0f;
+        tag_marker.color.g = 0.0f;
+        tag_marker.color.b = 1.0f;
+        tag_marker.color.a = 1.0;
+        // tag_marker.lifetime = ros::Duration();
+
+        publisher_->publish(tag_marker);
+    }
+    void timer_callback()
+    {
+        anchor_setting();
+    }
     rclcpp::TimerBase::SharedPtr timer_;
     rclcpp::Publisher<visualization_msgs::msg::Marker>::SharedPtr publisher_;
+    rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr subscription_;
+
 };
 
 int main(int argc, char **argv)
 {
     rclcpp::init(argc, argv);
-    auto node = std::make_shared<XinyiUWB>();
+    auto node = std::make_shared<MarkerUWB>();
 
     rclcpp::spin(node);
     rclcpp::shutdown();
