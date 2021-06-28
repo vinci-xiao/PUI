@@ -1,9 +1,5 @@
 # PUI on ROS2
 
-[TOC]
-
----
-
 Distributuon
 ---
 https://docs.ros.org/en/foxy/Releases.html
@@ -29,7 +25,9 @@ Reference
 - [ROS2 Foxy tutorial](https://docs.ros.org/en/foxy/Tutorials.html)
 - [Migrating launch files from ROS 1 to ROS 2](https://docs.ros.org/en/foxy/Guides/Launch-files-migration-guide.html)
 - [How to Setup VSCode for ROS](https://www.youtube.com/watch?v=RXyFSnjMd7M)
+- [Migration guide from ROS 1](https://docs.ros.org/en/foxy/Contributing/Migration-Guide.html?highlight=map#launch-files)
 - [採智科技機器人產品中文線上手冊翻譯整理](https://hackmd.io/@idminer/usermanual-tw/https%3A%2F%2Fhackmd.io%2FyhleSV1CQhmTJCMkFci80w)
+- [gitbook](https://zlargon.gitbooks.io/git-tutorial/content/startup/commit_a_patch.html)
 
 Imigration Journal from ROS1 to ROS2
 ---
@@ -78,14 +76,18 @@ Imigration Journal from ROS1 to ROS2
     - [DYNAMIXEL Quick Start Guide for ROS 2](https://www.youtube.com/watch?v=E8XPqDjof4U)
     - [DynamixelSDK 3.7.40 (Support ROS 2 Only)](https://github.com/ROBOTIS-GIT/DynamixelSDK/releases/tag/3.7.40)
     - TODO
-        -  [ ] Speed controller.cpp
-        -  [ ] mapping cmd_vel to speed controll
-- map_server (pui_overlapping)
-    - d
-    - d
+       > Dynamixel (pui_drive) TODO
+> -  [ ] Speed controller.cpp
+       > -  [ ] mapping cmd_vel to speed controll
+- map_serverrviz2 (pui_overlapping)
+    - [NAV2 install](https://navigation.ros.org/getting_started/index.html)
+    - [NAV2- map server](https://navigation.ros.org/configuration/packages/configuring-map-server.html)
 - rviz2 (pui_overlapping)
-    - f
-    - f
+    - [參考nav2_bringup rviz_launch.py](參考nav2_bringup rviz_launch.py](https://github.com/ros-planning/navigation2/blob/main/nav2_bringup/bringup/launch/rviz_launch.py /)
+    - [Nav2源码阅读（一）nav2_bringup tb3_simulation_launch.py](https://blog.csdn.net/weixin_41680653/article/details/117449074)
+- map_server (pui_overlapping)
+    - [NAV2 install](https://navigation.ros.org/getting_started/index.html)
+    - [NAV2- map server](https://navigation.ros.org/configuration/packages/configuring-map-server.html)
 - transform (pui_overlapping)
     - [ROS2入门教程-发布joint states和TF](https://www.ncnynl.com/archives/201801/2257.html)
     - f
