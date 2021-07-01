@@ -109,6 +109,22 @@ def generate_launch_description():
             name='tag_path',
             output='screen'),    
 
+        # TF (world -> map)
+        Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            name='world2map',
+            arguments = ["1.52", "1.68", "0", "0", "0", "-1.66", "1", "world", "map"],
+            output='screen'),   
+
+        # TF (map -> velodyne_link) 
+        Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            name='map2velodyne',
+            arguments = ["0", "0", "0.5", "0", "0", "0", "map", "velodyne_link"],
+            output='screen'),    
+
         # Launch rviz
         Node(
             package='rviz2',
