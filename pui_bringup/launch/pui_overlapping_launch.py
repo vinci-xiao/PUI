@@ -1,94 +1,120 @@
 import os
-
+ 
 from ament_index_python.packages import get_package_share_directory
-
+ 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, EmitEvent, RegisterEventHandler
-from launch.conditions import IfCondition, UnlessCondition
-from launch.event_handlers import OnProcessExit
-from launch.events import Shutdown
+from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
-from nav2_common.launch import ReplaceString
-
+from nav2_common.launch import RewrittenYaml
 
 def generate_launch_description():
     # Get the launch directory
     bringup_dir = get_package_share_directory('pui_bringup')
-
-    # Create the launch configuration variables
+ 
     namespace = LaunchConfiguration('namespace')
-    use_namespace = LaunchConfiguration('use_namespace')
-    rviz_config_file = LaunchConfiguration('rviz_config')
+    map_yaml_file = LaunchConfiguration('map_file')
+    rviz_config_file = LaunchConfiguration('rviz_file')
+    autostart = LaunchConfiguration('autostart')
+    params_file = LaunchConfiguration('params_file')
+    lifecycle_nodes = ['map_server']
+    use_sim_time = LaunchConfiguration('use_sim_time')    
 
-    # Declare the launch arguments
-    declare_namespace_cmd = DeclareLaunchArgument(
-        'namespace',
-        default_value='navigation',
-        description=('Top-level namespace. The value will be used to replace the '
-                     '<robot_namespace> keyword on the rviz config file.'))
+    # Map fully qualified names to relative ones so the node's namespace can be prepended.
+    # In case of the transforms (tf), currently, there doesn't seem to be a better alternative
+    # https://github.com/ros/geometry2/issues/32
+    # https://github.com/ros/robot_state_publisher/pull/30
+    # TODO(orduno) Substitute with `PushNodeRemapping`
+    #              https://github.com/ros2/launch_ros/issues/56
+    remappings = [('/tf', '/tf'),
+                  ('/tf_static', '/tf_static')]
 
-    declare_use_namespace_cmd = DeclareLaunchArgument(
-        'use_namespace',
-        default_value='false',
-        description='Whether to apply a namespace to the navigation stack')
+   # Create our own temporary YAML files that include substitutions
+    param_substitutions = {
+        'use_sim_time': use_sim_time,
+        'yaml_filename': map_yaml_file}
 
-    declare_rviz_config_file_cmd = DeclareLaunchArgument(
-        'rviz_config',
-        default_value=os.path.join(bringup_dir, 'rviz', 'map_overlapping.rviz'),
-        description='Full path to the RVIZ config file to use')
+    configured_params = RewrittenYaml(
+        source_file=params_file,
+        root_key=namespace,
+        param_rewrites=param_substitutions,
+        convert_types=True)
 
-    # Launch rviz
-    start_rviz_cmd = Node(
-        condition=UnlessCondition(use_namespace),
-        package='rviz2',
-        executable='rviz2',
-        arguments=['-d', rviz_config_file],
-        output='screen')
+    return LaunchDescription([
 
-    namespaced_rviz_config_file = ReplaceString(
-            source_file=rviz_config_file,
-            replacements={'<robot_namespace>': ('/', namespace)})
+        DeclareLaunchArgument(
+            'params_file',
+            default_value=os.path.join(bringup_dir, 'params', 'pui_params.yaml'),
+            description='Full path to the ROS2 parameters file to use'),
 
-    start_namespaced_rviz_cmd = Node(
-        condition=IfCondition(use_namespace),
-        package='rviz2',
-        executable='rviz2',
-        namespace=namespace,
-        arguments=['-d', namespaced_rviz_config_file],
-        output='screen',
-        remappings=[('/tf', 'tf'),
-                    ('/tf_static', 'tf_static'),
-                    ('/goal_pose', 'goal_pose'),
-                    ('/clicked_point', 'clicked_point'),
-                    ('/initialpose', 'initialpose')])
+        DeclareLaunchArgument(
+            'map_file',
+            default_value=os.path.join(bringup_dir, 'maps', 'hector_fixed.yaml'),
+            description='Full path to map yaml file to load'),
 
-    exit_event_handler = RegisterEventHandler(
-        condition=UnlessCondition(use_namespace),
-        event_handler=OnProcessExit(
-            target_action=start_rviz_cmd,
-            on_exit=EmitEvent(event=Shutdown(reason='rviz exited'))))
+        DeclareLaunchArgument(
+            'rviz_file',
+            default_value=os.path.join(bringup_dir, 'rviz', 'map_overlapping.rviz'),
+            description='Full path to the RVIZ config file to use'),
 
-    exit_event_handler_namespaced = RegisterEventHandler(
-        condition=IfCondition(use_namespace),
-        event_handler=OnProcessExit(
-            target_action=start_namespaced_rviz_cmd,
-            on_exit=EmitEvent(event=Shutdown(reason='rviz exited'))))
+        DeclareLaunchArgument(
+            'namespace', default_value='',
+            description='Top-level namespace'),
 
-    # Create the launch description and populate
-    ld = LaunchDescription()
+        DeclareLaunchArgument(
+            'autostart', default_value='true',
+            description='Automatically startup the pui stack'),
 
-    # Declare the launch options
-    ld.add_action(declare_namespace_cmd)
-    ld.add_action(declare_use_namespace_cmd)
-    ld.add_action(declare_rviz_config_file_cmd)
+        DeclareLaunchArgument(
+            'use_sim_time', default_value='true',
+            description='Use simulation (Gazebo) clock if true'),
 
-    # Add any conditioned actions
-    ld.add_action(start_rviz_cmd)
-    ld.add_action(start_namespaced_rviz_cmd)
+        # Trilateration
+        Node(
+            package='pui_uwb',
+            executable='trilateration_mse',
+            name='trilateration_mse',
+            output='screen'),   
 
-    # Add other nodes and processes we need
-    ld.add_action(exit_event_handler)
-    ld.add_action(exit_event_handler_namespaced)
+        # Map server
+        Node(
+            package='nav2_map_server',
+            executable='map_server',
+            name='map_server',
+            output='screen',
+            parameters=[configured_params],
+            remappings=remappings),
 
-    return ld
+        # Lifecycle_manager
+        Node(
+            package='nav2_lifecycle_manager',
+            executable='lifecycle_manager',
+            name='lifecycle_manager',
+            output='screen',
+            parameters=[{'use_sim_time': use_sim_time},
+                        {'autostart': autostart},
+                        {'node_names': lifecycle_nodes}]),    
+
+        # UWB markers
+        Node(
+            package='pui_markers',
+            executable='uwb_marker',
+            name='uwb_marker',
+            output='screen'),    
+
+        # Visualize tag_path 
+        Node(
+            package='pui_markers',
+            executable='tag_path',
+            name='tag_path',
+            output='screen'),    
+
+        # Launch rviz
+        Node(
+            package='rviz2',
+            executable='rviz2',
+            name='rviz2',
+            output='screen',
+            arguments=['-d', rviz_config_file])    
+
+    ])
