@@ -12,11 +12,11 @@ def generate_launch_description():
     # Get the launch directory
     bringup_dir = get_package_share_directory('pui_bringup')
  
-    namespace = LaunchConfiguration('namespace')
+    # namespace = LaunchConfiguration('namespace')
     map_yaml_file = LaunchConfiguration('map_file')
     rviz_config_file = LaunchConfiguration('rviz_file')
     autostart = LaunchConfiguration('autostart')
-    params_file = LaunchConfiguration('params_file')
+    param_file = LaunchConfiguration('param_file')
     lifecycle_nodes = ['map_server']
     use_sim_time = LaunchConfiguration('use_sim_time')    
 
@@ -26,8 +26,8 @@ def generate_launch_description():
     # https://github.com/ros/robot_state_publisher/pull/30
     # TODO(orduno) Substitute with `PushNodeRemapping`
     #              https://github.com/ros2/launch_ros/issues/56
-    remappings = [('/tf', '/tf'),
-                  ('/tf_static', '/tf_static')]
+    remappings = [('/tf', 'tf'),
+                  ('/tf_static', 'tf_static')]
 
    # Create our own temporary YAML files that include substitutions
     param_substitutions = {
@@ -35,21 +35,21 @@ def generate_launch_description():
         'yaml_filename': map_yaml_file}
 
     configured_params = RewrittenYaml(
-        source_file=params_file,
-        root_key=namespace,
+        source_file=param_file,
+        # root_key=namespace,
         param_rewrites=param_substitutions,
         convert_types=True)
 
     return LaunchDescription([
 
         DeclareLaunchArgument(
-            'params_file',
-            default_value=os.path.join(bringup_dir, 'params', 'pui_params.yaml'),
+            'param_file',
+            default_value=os.path.join(bringup_dir, 'param', 'pui_params.yaml'),
             description='Full path to the ROS2 parameters file to use'),
 
         DeclareLaunchArgument(
             'map_file',
-            default_value=os.path.join(bringup_dir, 'maps', 'hector_fixed.yaml'),
+            default_value=os.path.join(bringup_dir, 'map', 'hector_fixed.yaml'),
             description='Full path to map yaml file to load'),
 
         DeclareLaunchArgument(
@@ -57,16 +57,16 @@ def generate_launch_description():
             default_value=os.path.join(bringup_dir, 'rviz', 'map_overlapping.rviz'),
             description='Full path to the RVIZ config file to use'),
 
-        DeclareLaunchArgument(
-            'namespace', default_value='',
-            description='Top-level namespace'),
+        # DeclareLaunchArgument(
+        #     'namespace', default_value='',
+        #     description='Top-level namespace'),
 
         DeclareLaunchArgument(
-            'autostart', default_value='true',
+            'autostart', default_value='True',
             description='Automatically startup the pui stack'),
 
         DeclareLaunchArgument(
-            'use_sim_time', default_value='true',
+            'use_sim_time', default_value='false',
             description='Use simulation (Gazebo) clock if true'),
 
         # Trilateration
@@ -82,8 +82,9 @@ def generate_launch_description():
             executable='map_server',
             name='map_server',
             output='screen',
-            parameters=[configured_params],
-            remappings=remappings),
+            # parameters=[configured_params]            
+            parameters=[{'yaml_filename': map_yaml_file}]
+            ),
 
         # Lifecycle_manager
         Node(
@@ -91,9 +92,19 @@ def generate_launch_description():
             executable='lifecycle_manager',
             name='lifecycle_manager',
             output='screen',
-            parameters=[{'use_sim_time': use_sim_time},
+            parameters=[
+                        {'node_names': ['map_server']},
                         {'autostart': autostart},
-                        {'node_names': lifecycle_nodes}]),    
+                        # {'use_sim_time': use_sim_time},
+                        {'node_names': lifecycle_nodes}
+                        ]),   
+
+        # run_lifecycle_manager = launch_ros.actions.Node(
+        # package='nav2_lifecycle_manager',
+        # executable='lifecycle_manager',
+        # name='lifecycle_manager',
+        # output='screen',
+        # parameters=[{'node_names': ['map_server', 'amcl']}, {'autostart': True}]) 
 
         # UWB markers
         Node(

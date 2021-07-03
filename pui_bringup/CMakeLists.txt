@@ -32,8 +32,9 @@ if(BUILD_TESTING)
 endif()
 
 install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
-install(DIRECTORY maps DESTINATION share/${PROJECT_NAME})
+install(DIRECTORY map DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY rviz DESTINATION share/${PROJECT_NAME})  
-install(DIRECTORY params DESTINATION share/${PROJECT_NAME})  
+install(DIRECTORY param DESTINATION share/${PROJECT_NAME})  
+install(DIRECTORY config DESTINATION share/${PROJECT_NAME})  
 
 ament_package()
