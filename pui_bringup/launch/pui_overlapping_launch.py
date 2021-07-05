@@ -3,6 +3,7 @@ import os
 from ament_index_python.packages import get_package_share_directory
  
 from launch import LaunchDescription
+import launch
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
@@ -136,12 +137,25 @@ def generate_launch_description():
             arguments = ["0", "0", "0.5", "0", "0", "0", "map", "velodyne_link"],
             output='screen'),    
 
+        launch.actions.ExecuteProcess(
+            cmd=['ros2', 'bag', 'play', '/home/pev2/bag_files/try_name'],
+            output='screen'
+        ),
+
         # Launch rviz
         Node(
             package='rviz2',
             executable='rviz2',
             name='rviz2',
             output='screen',
-            arguments=['-d', rviz_config_file])    
+            arguments=['-d', rviz_config_file]),    
+
+        # Play rosbag
+        # Node(
+        #     package='ros2',
+        #     executable='bag',
+        #     name='bag',
+        #     output='screen',
+        #     arguments=['-o', '~/bag_files/try_name.bag']) 
 
     ])
