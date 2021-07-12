@@ -8,11 +8,13 @@
 
 #include <std_msgs/msg/int32.h>
 #include <std_msgs/msg/float32.h>
+#include <pui_msgs/msg/multi_range.h>
+pui_msgs__msg__MultiRange range_msg_;
 
 
 rcl_publisher_t publisher;
 std_msgs__msg__Int32 msg;
-std_msgs__msg__Float32 range_msg;
+
 rclc_executor_t executor;
 rclc_support_t support;
 rcl_allocator_t allocator;
@@ -33,7 +35,7 @@ bool started = false;
 bool ended = false;
 uint8_t inData[20];
 byte numIndex;
-float meterRange[4]={0,0,0,0};
+float meterRange[4];
 
 float stitchup(uint8_t hi_Bytes,uint8_t lo_Byte)
 {
@@ -85,7 +87,7 @@ void setup()
   RCCHECK(rclc_publisher_init_default(
     &publisher,
     &node,
-    ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Float32),
+    ROSIDL_GET_MSG_TYPE_SUPPORT(pui_msgs, msg, MultiRange),
     "uwb_teensy_node_publisher"));
 
   msg.data = 0;
@@ -131,18 +133,15 @@ void loop()
     
     handleRange();
 
-    // Serial output for debugging
-    // Serial.print("a0:"); Serial.print(meterRange[0]); Serial.print(", ");
-    // Serial.print("a1:"); Serial.print(meterRange[1]); Serial.print(", ");
-    // Serial.print("a2:"); Serial.print(meterRange[2]); Serial.print(", ");
-    // Serial.print("a3:"); Serial.print(meterRange[3]); Serial.print(", ");
-    // Serial.println("------------------------");
+    
+    range_msg_.ranges.data = (float *)calloc(10, sizeof(float));
+    range_msg_.ranges.capacity = 10;
+    
+    range_msg_.ranges.data= meterRange;
+    
+    range_msg_.ranges.size= sizeof meterRange/sizeof meterRange[0];
 
-    range_msg.data= meterRange[0];
-//    range_msg.data= meterRange;
-//    range_msg.data_length= 4;
-
-    RCSOFTCHECK(rcl_publish(&publisher, &range_msg, NULL));
+    RCSOFTCHECK(rcl_publish(&publisher, &range_msg_, NULL));
     
     // Reset for the next packet
     started = false;
