@@ -11,6 +11,8 @@ Install
 
 Reference 
 ---
+- [ROS2 目錄](https://www.guyuehome.com/25194)
+- [ROS2 cheats sheet](https://github.com/ubuntu-robotics/ros2_cheats_sheet/blob/master/cli/cli_cheats_sheet.pdf)
 - [ROS Kinetic和Ubuntu 16.04 LTS的支持即将结束：如何减轻影响？](https://cn.ubuntu.com/blog/ros-kinetic-and-ubuntu-16-04-eol)
 - [在Ubuntu 20.04中安装ROS2最新版本Foxy Fitzroy](https://blog.csdn.net/feimeng116/article/details/106602562)
 - [ROS2-Foxy安装教程
@@ -66,8 +68,8 @@ Imigration Journal from ROS1 to ROS2
 > TODO
 > - [x] tag_marker.cpp (merge into uwb_xinyi.cpp)
 > - [x] tag_path.cpp
-> - [ ] ros::duration migrate to ros2
-> - [ ] clean code
+> - [x] ros::duration migrate to ros2
+> - [x] clean code
 
 #### 5. pui_bringup
 - Dynamixel (pui_drive)
@@ -75,30 +77,70 @@ Imigration Journal from ROS1 to ROS2
     - [Dynamixel Workbench](https://emanual.robotis.com/docs/en/software/dynamixel/dynamixel_sdk/download/#repository)
     - [DYNAMIXEL Quick Start Guide for ROS 2](https://www.youtube.com/watch?v=E8XPqDjof4U)
     - [DynamixelSDK 3.7.40 (Support ROS 2 Only)](https://github.com/ROBOTIS-GIT/DynamixelSDK/releases/tag/3.7.40)
-    - TODO
-       > Dynamixel (pui_drive) TODO
-> -  [ ] Speed controller.cpp
-       > -  [ ] mapping cmd_vel to speed controll
-- map_serverrviz2 (pui_overlapping)
-    - [NAV2 install](https://navigation.ros.org/getting_started/index.html)
-    - [NAV2- map server](https://navigation.ros.org/configuration/packages/configuring-map-server.html)
+    - [dynamixel-workbench-msgs](https://github.com/ROBOTIS-GIT/dynamixel-workbench-msgs/tree/ros2-devel)
+    - [XL430-W250-T](https://emanual.robotis.com/docs/en/dxl/x/xl430-w250/)
+    - `ros2 topic pub -1 /set_velocity dynamixel_sdk_custom_interfaces/msg/SetVelocity "{id: 1, velocity: 0}"`
+    - ![](https://i.imgur.com/tw1U9Yr.png)
+        `ros2 launch pui_teleop pui_teleop_launch.py`
+        `ros2 run dynamixel_sdk_examples xl430_controll_node`
+> Dynamixel (pui_drive) TODO
+> - [x] Speed controller.cpp
+> - [x] mapping cmd_vel to speed controll
 - rviz2 (pui_overlapping)
-    - [參考nav2_bringup rviz_launch.py](參考nav2_bringup rviz_launch.py](https://github.com/ros-planning/navigation2/blob/main/nav2_bringup/bringup/launch/rviz_launch.py /)
+    - [參考nav2_bringup rviz_launch.py](https://github.com/ros-planning/navigation2/blob/main/nav2_bringup/bringup/launch/rviz_launch.py)
     - [Nav2源码阅读（一）nav2_bringup tb3_simulation_launch.py](https://blog.csdn.net/weixin_41680653/article/details/117449074)
 - map_server (pui_overlapping)
     - [NAV2 install](https://navigation.ros.org/getting_started/index.html)
     - [NAV2- map server](https://navigation.ros.org/configuration/packages/configuring-map-server.html)
+    - [managed life cycle](https://design.ros2.org/articles/node_lifecycle.html)
+    - [Map not showing in RVIZ2 when running with autostart](https://github.com/ros-planning/navigation2/issues/867)
+    - [no map received](https://get-help.robotigniteacademy.com/t/rviz-no-map-received/4721)
+    - [NAV2 -Map Server/Saver](https://navigation.ros.org/configuration/packages/configuring-map-server.html?highlight=map_server)
+    - `ros2 service call /map_server/load_map nav2_msgs/srv/LoadMap "{map_url: ~/pui_ws/src/pui_bringup/maps/hector_fixed.yaml}"`
+    - `ros2 service call /map_server/load_map nav2_msgs/srv/LoadMap "{map_url: ~/pui_ws/src/pui_bringup/params/pui_params.yaml}"`
+    - [turtlebot3_navigation2](https://github.com/ROBOTIS-GIT/turtlebot3/tree/foxy-devel/turtlebot3_navigation2)
+
 - transform (pui_overlapping)
+    - `ros2 run tf2_ros static_transform_publisher 1.52 1.68 0 0 0 -1.66 world map`
     - [ROS2入门教程-发布joint states和TF](https://www.ncnynl.com/archives/201801/2257.html)
-    - f
+    - [Using tf2 with ROS 2
+](https://docs.ros.org/en/foxy/Tutorials/tf2.html)
+
+- velodyne
+    - `sudo apt install ros-foxy-velodyne-*`
+    - [ros-drive velodyne](https://github.com/ros-drivers/velodyne/tree/ros2)
+    - http://wiki.ros.org/velodyne/Tutorials/Getting%20Started%20with%20the%20Velodyne%20VLP16
+    - Network setting
+        ![](https://i.imgur.com/aj3OITA.png)
+    - Check conection
+        ![](https://i.imgur.com/JNXYD5I.png)
+    - View on rviz2 (Fixed fram= velodyne)
+        ![](https://i.imgur.com/tIPKSW1.png)
+
 - ros2 bag (pui_overlapping)
-    - e
-    - f
+    - [Ros2bag](https://docs.ros.org/en/foxy/Tutorials/Ros2bag/Recording-And-Playing-Back-Data.html)
+    - `sudo apt install ros-foxy-rosbag2`
+    - `ros2 bag record --all -o name`
+- ros-serial arduino node
+    - [micro-ROS arduino](https://github.com/micro-ROS/micro_ros_arduino/tree/foxy)
+    - [Teensyduino](https://www.pjrc.com/teensy/td_download.html)
+    - [micro_ros_setup-foxy](https://github.com/micro-ROS/micro_ros_setup/tree/foxy)
+    - [ROS2与arduino入门教程-安装Teensyduino](https://www.ncnynl.com/archives/202012/3989.html)
+        `ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyACM0 -b 115200 -v 6`
+    - [開啟arduino_agent後,ros_node找不到時](https://github.com/micro-ROS/micro_ros_arduino/issues/223)
+        > 註解掉ros_domain_id=30
+    - [Teensy Hardware serial](https://www.pjrc.com/teensy/td_uart.html)
+    - ![](https://i.imgur.com/F08KNdI.png)
+    - [Adding a new package to the build system](https://github.com/micro-ROS/micro_ros_arduino/issues/14#issuecomment-722242175)
+    - [Array messages on micro ros](https://github.com/micro-ROS/rmw-microxrcedds/issues/53)
+
+---
+https://blog.csdn.net/RNG_uzi_/article/details/87340932
 > TODO
 > - [ ] pui_overlapping
-> - [ ] pui_drive
-> - [ ] velodyne
-> - [ ] point_to_laser
+> - [ ] pui_drive (codes in dynamixel_sdk... needs to be clean)
+> - [x] velodyne
+> - [x] point_to_laser
 
 
 
@@ -114,3 +156,27 @@ https://www.twblogs.net/a/5e81f804bd9eee211686735e
 https://gist.github.com/fntsrlike/323c171f88246c9357bb
 
 https://www.youtube.com/watch?v=Nbc7fzxFlYo
+
+[ros2 gazebo](https://cloud.tencent.com/developer/article/1508804)
+
+
+## cheat-sheet
+#### collect data
+```
+ros2 launch pui_bringup velodyne_all_launch.py
+ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyACM0 -b 115200 -v 6
+ros2 bag record -a -o bag_name
+```
+
+#### replay data
+```
+ros2 bag play bag_name --loop
+ros2 launch pui_uwb trilateration_mse.launch.py
+ros2 run pui_markers uwb_marker
+ros2 run pui_markers tag_path 
+rviz2
+```
+
+
+![](https://i.imgur.com/Au3jMkI.png)
+
