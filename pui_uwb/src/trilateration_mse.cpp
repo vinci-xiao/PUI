@@ -29,8 +29,8 @@ void matrix_A_setting(void)
 
 void matrix_b_setting(double r1, double r2, double r3)
 {
-    b.row(0)<< pow(x1_,2) -pow(x3_,2) +pow(y1_,2)-pow(y3_,2) +pow(r1,2)-pow(r3,2);  
-    b.row(1)<< pow(x2_,2) -pow(x3_,2) +pow(y2_,2)-pow(y3_,2) +pow(r2,2)-pow(r3,2); 
+    b.row(0)<< -pow(x1_,2) +pow(x3_,2) -pow(y1_,2) +pow(y3_,2) +pow(r1,2)-pow(r3,2);  
+    b.row(1)<< -pow(x2_,2) +pow(x3_,2) -pow(y2_,2) +pow(y3_,2) +pow(r2,2)-pow(r3,2); 
     // cout<<"\n r1:"<<r1<<" ,r2:"<<r2<<"  ,r3:"<<r3<<endl; 
     // cout<<"\n matrix_b:\n"<< b<<endl; 
 }  
