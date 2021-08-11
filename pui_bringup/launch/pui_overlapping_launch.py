@@ -70,12 +70,13 @@ def generate_launch_description():
             'use_sim_time', default_value='false',
             description='Use simulation (Gazebo) clock if true'),
 
-        # Trilateration
+        # Launch rviz
         Node(
-            package='pui_uwb',
-            executable='trilateration_mse',
-            name='trilateration_mse',
-            output='screen'),   
+            package='rviz2',
+            executable='rviz2',
+            name='rviz2',
+            output='screen',
+            arguments=['-d', rviz_config_file]),    
 
         # Map server
         Node(
@@ -87,25 +88,12 @@ def generate_launch_description():
             parameters=[{'yaml_filename': map_yaml_file}]
             ),
 
-        # Lifecycle_manager
+        # Trilateration
         Node(
-            package='nav2_lifecycle_manager',
-            executable='lifecycle_manager',
-            name='lifecycle_manager',
-            output='screen',
-            parameters=[
-                        {'node_names': ['map_server']},
-                        {'autostart': autostart},
-                        # {'use_sim_time': use_sim_time},
-                        {'node_names': lifecycle_nodes}
-                        ]),   
-
-        # run_lifecycle_manager = launch_ros.actions.Node(
-        # package='nav2_lifecycle_manager',
-        # executable='lifecycle_manager',
-        # name='lifecycle_manager',
-        # output='screen',
-        # parameters=[{'node_names': ['map_server', 'amcl']}, {'autostart': True}]) 
+            package='pui_uwb',
+            executable='trilateration_mse',
+            name='trilateration_mse',
+            output='screen'),   
 
         # UWB markers
         Node(
@@ -142,13 +130,18 @@ def generate_launch_description():
             output='screen'
         ),
 
-        # Launch rviz
+        # Lifecycle_manager
         Node(
-            package='rviz2',
-            executable='rviz2',
-            name='rviz2',
+            package='nav2_lifecycle_manager',
+            executable='lifecycle_manager',
+            name='lifecycle_manager',
             output='screen',
-            arguments=['-d', rviz_config_file]),    
+            parameters=[
+                        {'node_names': ['map_server']},
+                        {'autostart': autostart},
+                        # {'use_sim_time': use_sim_time},
+                        {'node_names': lifecycle_nodes}
+                        ]),   
 
         # Play rosbag
         # Node(
