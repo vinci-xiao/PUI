@@ -2,5 +2,8 @@
 #sudo udevadm control --reload-rules
 #sudo udevadm trigger
 
+// controller
+ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c21f", SUBSYSTEM=="input", MODE="666", SYMLINK+="pui_joy"
+
 // perception
 ATTRS{idVendor}=="2639", ATTRS{idProduct}=="0300", ATTRS{serial}=="DB1E7E2P", MODE="666", SYMLINK+="pui_imu"
