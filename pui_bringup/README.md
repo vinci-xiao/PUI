@@ -10,6 +10,7 @@
 ### USB device commands
 ```
 lsusb
+udevadm info /dev/ttyUSB0
 udevadm info -a -n /dev/ttyUSB1 | grep '{serial}'
 ```
 
