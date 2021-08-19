@@ -23,7 +23,7 @@
 
 4. Build xsense third-party driver (bluespace_ai_xsens_mti_driver)
     - Copy bluespace_ai_xsens_mti_driver folder into your ROS 2.0 workspace 'src' folder.
-        Make sure the permissions are set to o+rw on your files and directories.
+        Make sure the permissions are set to **o+rw** on your files and directories.
     - Build xspublic from your ament workspace:
         ```
         pushd src/bluespace_ai_xsens_ros_mti_driver/lib/xspublic && make && popd
