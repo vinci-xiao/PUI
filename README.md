@@ -7,6 +7,7 @@
     sudo apt install ros-foxy-joy ros-foxy-teleop-twist-joy libeigen3-dev
     sudo apt install ros-foxy-rosbag2 ros-foxy-rviz2 ros-foxy-rviz2-dbgsym ros-foxy-rviz-common*
     sudo apt install ros-foxy-navigation2 ros-foxy-nav2-bringup
+    sudo apt install ros-foxy-dynamixel-sdk
     ```
 2. Git Clone pui packages
     ```
@@ -35,5 +36,6 @@
         - Source workspace:
             $ source install/setup.bash
 
----
+### Git workflow see [here](https://medium.com/i-think-so-i-live/git%E4%B8%8A%E7%9A%84%E4%B8%89%E7%A8%AE%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B-10f4f915167e)
+
 
