@@ -9,4 +9,4 @@ ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c21f", SUBSYSTEM=="input", MODE="666
 ATTRS{idVendor}=="2639", ATTRS{idProduct}=="0300", ATTRS{serial}=="DB1E7E2P", MODE="666", SYMLINK+="pui_imu"
 
 // motor driver
-ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6014", ATTRS{serial}=="FT4TCUHH", MODE="666", SYMLINK+="pui_driver"
+ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6014", ATTRS{serial}=="FT4TCUHH", MODE="a+rw", SYMLINK+="pui_driver"
