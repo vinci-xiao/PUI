@@ -34,6 +34,7 @@ rcl_node_t node;
 bool started = false;
 bool ended = false;
 uint8_t inData[20];
+uint8_t tagID;
 byte numIndex;
 float meterRange[4];
 
@@ -123,13 +124,13 @@ void loop()
     // The end of packet marker arrived. Process the packet
     
     handleRange();
+    tagID = inData[3];
 
+    range_msg_.id = tagID;
     
     range_msg_.ranges.data = (float *)calloc(10, sizeof(float));
     range_msg_.ranges.capacity = 10;
-    
     range_msg_.ranges.data= meterRange;
-    
     range_msg_.ranges.size= sizeof meterRange/sizeof meterRange[0];
 
     RCSOFTCHECK(rcl_publish(&publisher, &range_msg_, NULL));

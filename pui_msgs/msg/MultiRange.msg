@@ -5,7 +5,7 @@ float32 min_range       # minimum range value [m]
 float32 max_range       # maximum range value [m]
                         # Fixed distance rangers require min_range==max_range
 
-int32 count             # numbers of ranges aka anchors
+int32 id                # id of anchors
 
 float32[] ranges        # range data [m]
                         # (Note: values < range_min or > range_max
