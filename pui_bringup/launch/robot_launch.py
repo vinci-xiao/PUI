@@ -29,6 +29,7 @@ def generate_launch_description():
             PythonLaunchDescriptionSource([imu_pkg_dir,'/xsens_mti_node.launch.py'])
         ),
 
+        # this node is not working
         Node(
             package='pui_drive',
             executable='xl430_controll_node',
