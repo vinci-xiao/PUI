@@ -37,6 +37,15 @@
         source install/setup.bash
         ```
 
+## For simply remote controll
+    ```
+    ros2 launch pui_teleop pui_teleop_launch.py
+    ros2 run pui_drive xl430_controll_node
+    ```
+
+## TODO:
+the pui_bringup/launch/robot_launch.py is not fully working (pui_drive node is not awaked successfully)
+
 ## 
 - Git workflow see [here](https://medium.com/i-think-so-i-live/git%E4%B8%8A%E7%9A%84%E4%B8%89%E7%A8%AE%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B-10f4f915167e)
 
