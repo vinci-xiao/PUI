@@ -1,7 +1,7 @@
 // To test this example, please follow the commands below.
 //
 // Open terminal #1
-// $ ros2 run dynamixel_sdk_examples xl430_controll_node
+// $ ros2 run pui_drive xl430_controll_node
 //
 // Open terminal #2 (run one of below commands at a time)
 // $ ros2 topic pub -1 /set_velocity dynamixel_sdk_custom_interfaces/SetVelocity "{id: 1, velocity: 1000}"
