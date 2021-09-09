@@ -80,7 +80,7 @@ void setup()
     &publisher,
     &node,
     ROSIDL_GET_MSG_TYPE_SUPPORT(pui_msgs, msg, MultiRange),
-    "uwb_teensy_node_publisher"));
+    "uwb_range"));
 
   msg.data = 0;
   
