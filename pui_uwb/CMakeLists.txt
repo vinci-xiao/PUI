@@ -37,12 +37,16 @@ endif()
 add_executable(trilateration_mse src/trilateration_mse.cpp)
 ament_target_dependencies(trilateration_mse rclcpp std_msgs geometry_msgs pui_msgs Eigen3)
 
+add_executable(following_node src/following_node.cpp)
+ament_target_dependencies(following_node rclcpp std_msgs geometry_msgs pui_msgs)
+
 install(TARGETS
   trilateration_mse
+  following_node
   DESTINATION lib/${PROJECT_NAME}
 )
 
-install(DIRECTORY launch
+install(DIRECTORY launch params
   DESTINATION share/${PROJECT_NAME})
 
 ament_package()
