@@ -180,3 +180,9 @@ rviz2
 
 ![](https://i.imgur.com/Au3jMkI.png)
 
+
+### Compile specific pkg
+```
+ros2 pkg create --build-type ament_cmake <-package name->
+```
+
