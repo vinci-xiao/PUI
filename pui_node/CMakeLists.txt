@@ -41,7 +41,7 @@ include_directories(
 add_library(${PROJECT_NAME}_lib
 
   "src/diff_drive_controller.cpp"
-  # "src/dynamixel_sdk_wrapper.cpp"
+  "src/dynamixel_sdk_wrapper.cpp"
   "src/odometry.cpp"
   "src/pui.cpp"
 
