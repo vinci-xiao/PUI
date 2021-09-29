@@ -3,9 +3,10 @@
 <package format="3">
   <name>pui_node</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="t107408001@ntut.orgt.tw">pev2</maintainer>
-  <license>TODO: License declaration</license>
+  <description>
+    Pui driver node that includes diff drive controller, odometry and tf node
+  </description>   <maintainer email="vincy.vcx@gmail.com">vincy xiao</maintainer>
+  <license>Apache 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   

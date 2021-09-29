@@ -20,7 +20,7 @@
 #include <queue>
 
 // #include "pui_node/control_table.hpp"
-#include "pui_node/dynamixel_sdk_wrapper.hpp"
+// #include "pui_node/dynamixel_sdk_wrapper.hpp"
 #include "pui_node/odometry.hpp"
 
 // #include "turtlebot3_node/devices/devices.hpp"
@@ -63,6 +63,7 @@ public:
 private:
   // void init_dynamixel_sdk_wrapper(const std::string & usb_port);
   // void check_device_status();
+  // void setup_dynamixel(uint8_t dxl_id);
 
   // void add_sensors();
   // void add_devices();
