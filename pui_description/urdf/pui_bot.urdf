@@ -161,7 +161,17 @@
     <origin xyz="-0.032 0 0.068" rpy="0 0 0"/>
   </joint>
 
-  <link name="imu_link"/>
+  <link name="imu_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://xsens_mti_driver/urdf/MTi_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="xsens_orange">
+        <color rgba="0.92 0.45 0.02 1.0"/>
+      </material>
+    </visual>
+  </link>
 
   <joint name="scan_joint" type="fixed">
     <parent link="base_link"/>
