@@ -191,6 +191,7 @@ void Odometry::update_joint_state(
   last_joint_positions[1] = joint_state->position[1];
 }
 
+// ref) https://hackmd.io/@MA5lH45bRiKxlMijQCXRfQ/BkOmx-oUm?type=view
 void Odometry::update_imu(const std::shared_ptr<sensor_msgs::msg::Imu const> & imu)
 {
   imu_angle_ = atan2f(
