@@ -158,14 +158,14 @@
   <joint name="imu_joint" type="fixed">
     <parent link="base_link"/>
     <child link="imu_link"/>
-    <origin xyz="-0.032 0 0.068" rpy="0 0 0"/>
+    <origin xyz="-0.032 0 0.2136" rpy="0 0 0"/>
   </joint>
 
   <link name="imu_link">
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://xsens_mti_driver/urdf/MTi_1.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://pui_description/meshes/sensors/MTi_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="xsens_orange">
         <color rgba="0.92 0.45 0.02 1.0"/>
@@ -181,9 +181,9 @@
 
   <link name="base_scan">
     <visual>
-      <origin xyz="0 0 0.0" rpy="0 0 0"/>
+      <origin xyz="0 0 -0.032" rpy="0 0 -1.57"/>
       <geometry>
-        <mesh filename="package://pui_description/meshes/sensors/lds.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://pui_description/meshes/sensors/vlp.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="dark"/>
     </visual>
