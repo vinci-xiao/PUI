@@ -41,7 +41,7 @@ include_directories(
 add_library(${PROJECT_NAME}_lib
 
   "src/diff_drive_controller.cpp"
-  # "src/dynamixel_sdk_wrapper.cpp"
+  "src/dynamixel_controller.cpp"
   "src/odometry.cpp"
   "src/pui.cpp"
 
@@ -69,20 +69,23 @@ target_link_libraries(${PROJECT_NAME}_lib)
 ament_target_dependencies(${PROJECT_NAME}_lib ${DEPENDENCIES})
 
 set(EXECUTABLE_NAME "pui_ros")
-
 add_executable(${EXECUTABLE_NAME} src/node_main.cpp)
 target_link_libraries(${EXECUTABLE_NAME} ${PROJECT_NAME}_lib)
 ament_target_dependencies(${EXECUTABLE_NAME} ${DEPENDENCIES})
 
-
+add_executable(dynamixel_controller src/dynamixel_controller.cpp)
+target_link_libraries(dynamixel_controller ${PROJECT_NAME}_lib)
+ament_target_dependencies(dynamixel_controller ${DEPENDENCIES})
 ################################################################################
 # Install
 ################################################################################
-install(DIRECTORY param
+install(DIRECTORY param include
   DESTINATION share/${PROJECT_NAME}
 )
 
-install(TARGETS ${EXECUTABLE_NAME}
+install(TARGETS 
+  ${EXECUTABLE_NAME}
+  dynamixel_controller
   DESTINATION lib/${PROJECT_NAME}
 )
 
