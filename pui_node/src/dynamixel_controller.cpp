@@ -85,7 +85,7 @@ DynamixelController::DynamixelController()
         portHandler,
         2,
         ADDR_GOAL_VELOCITY,
-        dynamixel_velocity[RIGHT],
+        -dynamixel_velocity[RIGHT],  // cuz left and right motor are mirrored.
         &dxl_error
       );
       // show cmd_result of right_wheel
