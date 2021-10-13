@@ -7,12 +7,12 @@
 
 using namespace Eigen;  
 
-double x1_= 0.0;
-double y1_= 0.0;
-double x2_= 0.0;
-double y2_= 3.406;
-double x3_= 2.95;
-double y3_= 1.703;
+double x1_= -0.66;
+double y1_= -0.10;
+double x2_= 0.80;
+double y2_= 0.28;
+double x3_= 0.80;
+double y3_= -0.28;
 
 // AX=b
 Matrix<double, 2, 2> A;               // Fixed rows and cols. 
@@ -56,8 +56,6 @@ geometry_msgs::msg::Pose maximum_likelihood_est(void)
     pose.position.y= tag_y;
 
     return pose;
-    // publisher_->publish(pose);
-
 }  
 /////////////////////////////////////////////////////////////////////////////////////
 
