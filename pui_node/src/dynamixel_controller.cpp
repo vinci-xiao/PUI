@@ -53,7 +53,7 @@ DynamixelController::DynamixelController()
       double velocity_constant_value = 1 / (wheel_radius_ * rpm * 0.10472);
 
       wheel_velocity[LEFT]  = robot_lin_vel - (robot_ang_vel * wheel_separation_ / 2);
-      wheel_velocity[RIGHT] = -(robot_lin_vel + (robot_ang_vel * wheel_separation_ / 2));
+      wheel_velocity[RIGHT] = robot_lin_vel + (robot_ang_vel * wheel_separation_ / 2);
 
       if (wheel_velocity[LEFT] == 0.0f) dynamixel_velocity[LEFT] = 0;
       else dynamixel_velocity[LEFT] = (wheel_velocity[LEFT] * velocity_constant_value/5); // TODO: ratio of cmd_vel and dynamixel_velocity
@@ -174,11 +174,11 @@ void DynamixelController::publish_timer(const std::chrono::milliseconds timeout)
       joint_state_msg_.name.push_back("wheel_left_joint");
       joint_state_msg_.name.push_back("wheel_right_joint");
 
-      joint_state_msg_.position.push_back(DEG_PULSE_TO_RAD * position[0]);
-      joint_state_msg_.position.push_back(DEG_PULSE_TO_RAD * position[1]);
+      joint_state_msg_.position.push_back(DEG_PULSE_TO_RAD * position[0]);  // left
+      joint_state_msg_.position.push_back(DEG_PULSE_TO_RAD * position[1]);  // right -> bugs!!!
 
-      joint_state_msg_.velocity.push_back(RPM_TO_MS * (int32_t)velocity[0]);
-      joint_state_msg_.velocity.push_back(RPM_TO_MS * (int32_t)velocity[1]);
+      joint_state_msg_.velocity.push_back(RPM_TO_MS * (int32_t)velocity[0]);  // left
+      joint_state_msg_.velocity.push_back(RPM_TO_MS * (int32_t)velocity[1]);  // right
 
       // joint_state_msg_.effort.push_back(effort[0]);
       // joint_state_msg_.effort.push_back(effort[1]);
