@@ -53,7 +53,7 @@ DynamixelController::DynamixelController()
       double velocity_constant_value = 1 / (wheel_radius_ * rpm * 0.10472);
 
       wheel_velocity[LEFT]  = robot_lin_vel - (robot_ang_vel * wheel_separation_ / 2);
-      wheel_velocity[RIGHT] = robot_lin_vel + (robot_ang_vel * wheel_separation_ / 2);
+      wheel_velocity[RIGHT] = -(robot_lin_vel + (robot_ang_vel * wheel_separation_ / 2));
 
       if (wheel_velocity[LEFT] == 0.0f) dynamixel_velocity[LEFT] = 0;
       else dynamixel_velocity[LEFT] = (wheel_velocity[LEFT] * velocity_constant_value/5); // TODO: ratio of cmd_vel and dynamixel_velocity
@@ -85,7 +85,7 @@ DynamixelController::DynamixelController()
         portHandler,
         2,
         ADDR_GOAL_VELOCITY,
-        -dynamixel_velocity[RIGHT],  // cuz left and right motor are mirrored.
+        dynamixel_velocity[RIGHT],  // cuz left and right motor are mirrored.
         &dxl_error
       );
       // show cmd_result of right_wheel
