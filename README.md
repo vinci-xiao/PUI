@@ -18,9 +18,18 @@ ros2 launch pui_navigation2 online_async_launch.py
 #### save a map
 ```
 ros2 launch nav2_map_server map_saver_server.launch.py 
-ros2 service call /map_saver/save_map nav2_msgs/srv/SaveMap "{map_topic: map, map_url: map_name, image_format: pgm, map_mode: trinary, free_thresh: 0.25, occupied_thresh: 0.65}"
+ros2 service call /map_saver/save_map nav2_msgs/srv/SaveMap "{map_topic: map, map_url: map_1015_2, image_format: pgm, map_mode: trinary, free_thresh: 0.25, occupied_thresh: 0.65}"
 ros2 run nav2_map_server map_saver_cli -f ~/map_name
 ```
+
+#### navigating
+```
+ros2 launch pui_bringup robot.launch.py
+ros2 launch nav2_bringup bringup_launch.py use_sim_time:=False autostart:=False map:=~/map_10153.yaml
+ros2 run rviz2 rviz2 -d $(ros2 pkg prefix nav2_bringup)/share/nav2_bringup/rviz/nav2_default_view.rviz
+```
+-> Click on the 2D Pose Estimate button and point the location of the robot on the map.
+-> Send a Goal Pose by using Nav2 Goal
 
 #### micro-ros
 ```
