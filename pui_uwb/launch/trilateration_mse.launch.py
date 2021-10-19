@@ -12,5 +12,5 @@ def generate_launch_description():
 
         launch_ros.actions.Node(
             package='pui_uwb', executable='trilateration_mse', name='trilateration_mse',
-            remappings=[('/uwb_range', '/uwb_teensy_node_publisher')])
+            remappings=[('/uwb_range', '/uwb_range')])
     ])
