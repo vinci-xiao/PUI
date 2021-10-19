@@ -22,6 +22,9 @@ find_package(rclcpp REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(pui_msgs REQUIRED)   # for customed msg (MultiRange)
 find_package(geometry_msgs REQUIRED)
+find_package(tf2_msgs REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_ros REQUIRED)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -35,7 +38,7 @@ if(BUILD_TESTING)
 endif()
 
 add_executable(trilateration_mse src/trilateration_mse.cpp)
-ament_target_dependencies(trilateration_mse rclcpp std_msgs geometry_msgs pui_msgs Eigen3)
+ament_target_dependencies(trilateration_mse rclcpp std_msgs geometry_msgs pui_msgs Eigen3 tf2_msgs tf2 tf2_ros)
 
 add_executable(following_node src/following_node.cpp)
 ament_target_dependencies(following_node rclcpp std_msgs geometry_msgs pui_msgs)
