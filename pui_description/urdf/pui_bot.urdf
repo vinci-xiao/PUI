@@ -202,4 +202,53 @@
     </inertial>
   </link>
 
+  <!-- for uwb -->
+  <joint name="anchor_0_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="anchor_0_link"/>
+    <origin xyz="0.04 0 0.10" rpy="0 0 0"/>
+  </joint>
+
+  <link name="anchor_0_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.04 0.06"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+
+  <joint name="anchor_1_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="anchor_1_link"/>
+    <origin xyz="0.8 0.30 0.35" rpy="0 0 0"/>
+  </joint>
+
+  <link name="anchor_1_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.04 0.06"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+
+  <joint name="anchor_2_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="anchor_2_link"/>
+    <origin xyz="0.8 -0.30 0.35" rpy="0 0 0"/>
+  </joint>
+
+  <link name="anchor_2_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.04 0.06"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+
 </robot>
