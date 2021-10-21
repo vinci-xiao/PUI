@@ -61,3 +61,17 @@ rviz2
 ros2 pkg create --build-type ament_cmake <-package name->
 ```
 
+## PUI hardware configuration
+*[/pui_bringup/21-pui.rules] - hardware rules permission for joy and dynamixel controll
+
+### Find USB devics info 
+```
+udevadm info -a -n /dev/ttyUSB0 | grep '{serial}'
+udevadm info -a -n /dev/ttyUSB0 | grep '{devpath}'
+```
+### Implant hardware rules
+```
+sudo cp *.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+```

@@ -1,18 +1,11 @@
 #http://linux-tips.org/t/prevent-modem-manager-to-capture-usb-serial-devices/284/2.
 
-#cp rules /etc/udev/rules.d/
+#sudo cp *.rules /etc/udev/rules.d/
 #sudo udevadm control --reload-rules
 #sudo udevadm trigger
 
 // pui_node
-ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", ATTRS{devpath}=="2.3", ENV{ID_MM_DEVICE_IGNORE}="1", MODE="666", SYMLINK+="mih_vesc_middrive"
-ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", ATTRS{devpath}=="2.4", ENV{ID_MM_DEVICE_IGNORE}="1", MODE="666", SYMLINK+="mih_vesc_steering"
-ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523",  ATTRS{devpath}=="2.1", ENV{ID_MM_DEVICE_IGNORE}="1", MODE="666", SYMLINK+="mih_rear_encoder_arduino"
+ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6014", ATTRS{serial}=="FT5WJ8BL", ENV{ID_MM_DEVICE_IGNORE}="1", MODE="666", SYMLINK+="pui_dynamixel"
 
 // pui_teleop
-ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", ATTRS{serial}=="AI0283LV", ENV{ID_MM_DEVICE_IGNORE}="1", MODE="666", SYMLINK+="mih_eye_controller"
-ATTRS{idVendor}=="046d", ATTRS{idProduct}=="0843", ATTRS{serial}=="B01D266E", ENV{ID_MM_DEVICE_IGNORE}="1", MODE="666", SYMLINK+="mih_center_camera"
-ATTRS{idVendor}=="2341", ATTRS{idProduct}=="0042", ATTRS{serial}=="55839313438351719150", ENV{ID_MM_DEVICE_IGNORE}="1", MODE="666", SYMLINK+="mih_lights_arduino"
-
-//pui_bringup
 KERNEL=="event[0-9]*", SUBSYSTEM=="input", ATTRS{name}=="js0", ACTION=="add", SYMLINK+="logitech_f710", MODE="666"
