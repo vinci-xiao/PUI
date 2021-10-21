@@ -25,8 +25,8 @@ public:
 private:
     void tag_callback(geometry_msgs::msg::Pose::SharedPtr tag) 
     {
-      path_record.header.frame_id = "/world";
-      pose_record.header.frame_id = "/world";
+      path_record.header.frame_id = "/base_link";
+      pose_record.header.frame_id = "/base_link";
       pose_record.pose.position = tag->position;
       pose_record.pose.orientation = tag->orientation;
       path_record.poses.push_back(pose_record);

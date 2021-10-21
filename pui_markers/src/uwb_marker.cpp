@@ -30,7 +30,7 @@ private:
 
         // anchor_0
         visualization_msgs::msg::Marker anchor_0;
-        anchor_0.header.frame_id = "/world";
+        anchor_0.header.frame_id = "/base_link";
         anchor_0.header.stamp = rclcpp::Clock().now();
         anchor_0.ns = "uwb_marker";
         anchor_0.id = 0;
