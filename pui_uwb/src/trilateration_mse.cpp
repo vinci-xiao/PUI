@@ -23,16 +23,9 @@ using std::placeholders::_1;
 using namespace std::chrono_literals;
 using namespace Eigen;  
 
-// double x1_= -0.66;
-// double y1_= -0.10;
-// double x2_= 0.80;
-// double y2_= 0.28;
-// double x3_= 0.80;
-// double y3_= -0.28;
-
-double x1_, y1_;
-double x2_, y2_;
-double x3_, y3_;
+double x1_, y1_, z1_;
+double x2_, y2_, z2_;
+double x3_, y3_, z3_;
 
 // AX=b
 Matrix<double, 2, 2> A;               // Fixed rows and cols. 
@@ -65,6 +58,8 @@ private:
 
         rclcpp::Time now = this->get_clock()->now();
 
+        RCLCPP_INFO(this->get_logger(), "Listening static tf...");
+
         anchor_0_tf = tf_buffer_->lookupTransform(
         "base_link","anchor_0_link", now, 1s);
 
@@ -76,11 +71,20 @@ private:
 
         x1_ = anchor_0_tf.transform.translation.x;
         y1_ = anchor_0_tf.transform.translation.y;
+        z1_ = anchor_0_tf.transform.translation.z;
+
         x2_ = anchor_1_tf.transform.translation.x;
         y2_ = anchor_1_tf.transform.translation.y;
+        z2_ = anchor_1_tf.transform.translation.z;
+
         x3_ = anchor_2_tf.transform.translation.x;
         y3_ = anchor_2_tf.transform.translation.y;
-        RCLCPP_INFO(this->get_logger(), "Done process tf");
+        z3_ = anchor_2_tf.transform.translation.z;
+
+        RCLCPP_INFO(this->get_logger(), "anchor_0: %lf, %lf, %lf", x1_, y1_, z1_);
+        RCLCPP_INFO(this->get_logger(), "anchor_1: %lf, %lf, %lf", x2_, y2_, z2_);
+        RCLCPP_INFO(this->get_logger(), "anchor_2: %lf, %lf, %lf", x3_, y3_, z3_);
+
     }
     void matrix_A_setting(void)
     {

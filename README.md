@@ -61,6 +61,14 @@ rviz2
 ros2 pkg create --build-type ament_cmake <-package name->
 ```
 
+### Test uwb calculation
+```
+ros2 launch pui_description display.launch.py
+ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyACM1 -b 115200 -v 6
+ros2 launch pui_uwb trilateration_mse.launch.py
+ros2 run pui_markers tag_path
+```
+
 ## PUI hardware configuration
 *[/pui_bringup/21-pui.rules] - hardware rules permission for joy and dynamixel controll
 
