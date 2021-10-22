@@ -27,19 +27,11 @@ find_package(nav_msgs REQUIRED)
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
-if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  # the following line skips the linter which checks for copyrights
-  # uncomment the line when a copyright and license is not present in all source files
-  #set(ament_cmake_copyright_FOUND TRUE)
-  # the following line skips cpplint (only works in a git repo)
-  # uncomment the line when this package is not in a git repo
-  #set(ament_cmake_cpplint_FOUND TRUE)
-  ament_lint_auto_find_test_dependencies()
-endif()
-
 add_executable(tag_path src/tag_path.cpp)
 ament_target_dependencies(tag_path rclcpp geometry_msgs std_msgs nav_msgs)
+
+add_executable(tag_path_3d src/tag_path_3d.cpp)
+ament_target_dependencies(tag_path_3d rclcpp geometry_msgs std_msgs nav_msgs)
 
 add_executable(uwb_marker src/uwb_marker.cpp)
 ament_target_dependencies(uwb_marker rclcpp visualization_msgs geometry_msgs)
@@ -47,6 +39,7 @@ ament_target_dependencies(uwb_marker rclcpp visualization_msgs geometry_msgs)
 install(TARGETS
   uwb_marker
   tag_path
+  tag_path_3d
   DESTINATION lib/${PROJECT_NAME}
 )
 
