@@ -206,7 +206,7 @@
   <joint name="anchor_0_joint" type="fixed">
     <parent link="base_link"/>
     <child link="anchor_0_link"/>
-    <origin xyz="-0.80 0.18 0.20" rpy="0 0 0"/>
+    <origin xyz="-0.80 -0.18 0.20" rpy="0 0 0"/>
   </joint>
 
   <link name="anchor_0_link">
