@@ -36,7 +36,7 @@ public:
     HybridCosine()
     : Node("hybrid_cosine")
     {
-        tag_publisher_ = this->create_publisher<geometry_msgs::msg::Pose>("tag_position_3d", 10);
+        tag_publisher_ = this->create_publisher<geometry_msgs::msg::Pose>("tag_position", 3);
         uwb_subscriber_ = this->create_subscription<pui_msgs::msg::MultiRange>(
             "uwb_range", 10, std::bind(&HybridCosine::uwb_callback, this, std::placeholders::_1));
         tf_buffer_ = std::make_unique<tf2_ros::Buffer>(this->get_clock());
@@ -118,14 +118,16 @@ private:
         p.position.y = y2_ + r3*cos(cosine_rule(r2, r3, base_anchor_));
         p.position.z = z1_; // default same height with anchor0
 
-        if ((r1-r3) >= length_platform_)
-        {
-            p.position.x = x2_ + r3*sin(cosine_rule(r2, r3, base_anchor_));
-        }
-        else if((r1-r3) < length_platform_)
-        {
-            p.position.x = x2_ - r3*sin(cosine_rule(r2, r3, base_anchor_));
-        }
+        p.position.x = x2_ + r3*sin(cosine_rule(r2, r3, base_anchor_));
+
+        // if ((r1-r3) >= length_platform_)
+        // {
+        //     p.position.x = x2_ + r3*sin(cosine_rule(r2, r3, base_anchor_));
+        // }
+        // else if((r1-r3) < length_platform_)
+        // {
+        //     p.position.x = x2_ - r3*sin(cosine_rule(r2, r3, base_anchor_));
+        // }
 
         tag_publisher_->publish(p);
     }
