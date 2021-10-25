@@ -28,7 +28,7 @@ find_package(nav_msgs REQUIRED)
 # find_package(<dependency> REQUIRED)
 
 add_executable(tag_path src/tag_path.cpp)
-ament_target_dependencies(tag_path rclcpp geometry_msgs std_msgs nav_msgs)
+ament_target_dependencies(tag_path rclcpp geometry_msgs std_msgs nav_msgs visualization_msgs)
 
 add_executable(tag_path_3d src/tag_path_3d.cpp)
 ament_target_dependencies(tag_path_3d rclcpp geometry_msgs std_msgs nav_msgs)
