@@ -87,24 +87,23 @@ private:
     }
     double cosine_rule(double distance_a, double distance_b, double distance_c)
     {
-        static double angle_alpha, fraction;
+        static double angle_alpha, fraction, last_angle_alpha;
 
         fraction = (pow(distance_b,2)+pow(distance_c,2)-pow(distance_a,2))/(2*distance_b*distance_c);
-
-        //limit check
-        // if (fraction >= 1.0)
-        // {
-        //     fraction = 1.0; 
-        //     RCLCPP_INFO(this->get_logger(), "Out Of Limit! fraction = 1.0");
-        // }
-        // else if(fraction <= -1.0)
-        // {
-        //     fraction = -1.0; 
-        //     RCLCPP_INFO(this->get_logger(), "Out Of Limit! fraction = -1.0");
-        // }
-
         angle_alpha = acos(fraction);
-        return angle_alpha;
+
+        //check NaN error
+        if(__isnan(angle_alpha))
+        {
+            RCLCPP_INFO(this->get_logger(), "NaN value!! when %lf, %lf, %lf",distance_a, distance_b, distance_c);
+            return last_angle_alpha;
+        }
+        else
+        {
+            last_angle_alpha = angle_alpha;
+            return angle_alpha;
+        }
+
     }
     void uwb_callback(pui_msgs::msg::MultiRange::SharedPtr msg) 
     {
@@ -115,10 +114,9 @@ private:
         r2= msg->ranges[1];
         r3= msg->ranges[2];
 
-        p.position.y = y2_ + r3*cos(cosine_rule(r2, r3, base_anchor_));
         p.position.z = z1_; // default same height with anchor0
-
-        p.position.x = x2_ + r3*sin(cosine_rule(r2, r3, base_anchor_));
+        p.position.y = y3_ + r3*cos(cosine_rule(r2, r3, base_anchor_));
+        p.position.x = x3_ + r3*sin(cosine_rule(r2, r3, base_anchor_));
 
         // if ((r1-r3) >= length_platform_)
         // {
