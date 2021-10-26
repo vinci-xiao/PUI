@@ -27,7 +27,8 @@ using namespace Eigen;
 double x1_, y1_, z1_;
 double x2_, y2_, z2_;  // defaust x2_ should be same as x3_ 
 double x3_, y3_, z3_;
-double base_anchor_;
+double base_anchor_, length_an01_,length_an02_;
+double angle_an1_, angle_an2_;
 double length_platform_;
 /////////////////////////////////////////////////////////////////////////////////////
 class HybridCosine : public rclcpp::Node
@@ -78,12 +79,19 @@ private:
 
         // base_calculation (anchor1 <-->anchor2)
         base_anchor_ = sqrtl(pow((x2_-x3_),2)+pow((y2_-y3_),2)+pow((z2_-z3_),2));
+        length_an01_ = sqrtl(pow((x1_-x2_),2)+pow((y1_-y2_),2)+pow((z1_-z2_),2));
+        length_an02_ = sqrtl(pow((x1_-x3_),2)+pow((y1_-y3_),2)+pow((z1_-z3_),2));
+
+        angle_an1_ = cosine_rule(length_an02_, length_an01_, base_anchor_);
+        angle_an2_ = cosine_rule(length_an01_, length_an02_, base_anchor_);
+
         length_platform_ = fabs(x1_ - x2_);
 
         RCLCPP_INFO(this->get_logger(), "anchor_0: %lf, %lf, %lf", x1_, y1_, z1_);
         RCLCPP_INFO(this->get_logger(), "anchor_1: %lf, %lf, %lf", x2_, y2_, z2_);
         RCLCPP_INFO(this->get_logger(), "anchor_2: %lf, %lf, %lf", x3_, y3_, z3_);
-
+        RCLCPP_INFO(this->get_logger(), "base_anchor_: %lf, length_an01_:%lf, length_an02_:%lf", base_anchor_, length_an01_, length_an02_);
+        RCLCPP_INFO(this->get_logger(), "angle_an1_: %lf, angle_an2_:%lf", angle_an1_, angle_an2_);
     }
     double cosine_rule(double distance_a, double distance_b, double distance_c)
     {
@@ -103,12 +111,12 @@ private:
             last_angle_alpha = angle_alpha;
             return angle_alpha;
         }
-
     }
     void uwb_callback(pui_msgs::msg::MultiRange::SharedPtr msg) 
     {
         static auto p = geometry_msgs::msg::Pose();
         static double r1,r2,r3 = 0;
+        static double measured_angle_an1, measured_angle_an2;
 
         r1= msg->ranges[0];
         r2= msg->ranges[1];
@@ -116,18 +124,50 @@ private:
 
         p.position.z = z1_; // default same height with anchor0
         p.position.y = y3_ + r3*cos(cosine_rule(r2, r3, base_anchor_));
-        p.position.x = x3_ + r3*sin(cosine_rule(r2, r3, base_anchor_));
 
-        // if ((r1-r3) >= length_platform_)
-        // {
-        //     p.position.x = x2_ + r3*sin(cosine_rule(r2, r3, base_anchor_));
-        // }
-        // else if((r1-r3) < length_platform_)
-        // {
-        //     p.position.x = x2_ - r3*sin(cosine_rule(r2, r3, base_anchor_));
-        // }
+        //Depends on calculated y to decide left or right 
+        //Then choosing corresponding angle to check is_rear or not
+        if(p.position.y <= 0)
+        {
+            measured_angle_an1 = cosine_rule(r1, r2, length_an01_);
+
+            if(is_rear(measured_angle_an1, angle_an1_))
+            {
+                p.position.x = x3_ - r3*sin(cosine_rule(r2, r3, base_anchor_));
+                RCLCPP_INFO(this->get_logger(), "Tag is now in rear");
+            }
+            else // front
+            {
+                p.position.x = x3_ + r3*sin(cosine_rule(r2, r3, base_anchor_));
+            }
+        }
+        else // only when y>0
+        {
+            measured_angle_an2 = cosine_rule(r1, r3, length_an02_);
+
+            if(is_rear(measured_angle_an2, angle_an2_))
+            {
+                p.position.x = x3_ - r3*sin(cosine_rule(r2, r3, base_anchor_));
+                RCLCPP_INFO(this->get_logger(), "Tag is now in rear");
+            }
+            else // front
+            {
+                p.position.x = x3_ + r3*sin(cosine_rule(r2, r3, base_anchor_));
+            }
+        }
 
         tag_publisher_->publish(p);
+    }
+    bool is_rear(double measure_val,double fix_angle) 
+    {
+        if(measure_val >= fix_angle)
+        {
+            return false;
+        }
+        else // only when measure_val < fix_angle
+        {
+            return true;
+        }
     }
     rclcpp::Publisher<geometry_msgs::msg::Pose>::SharedPtr tag_publisher_;
     rclcpp::Subscription<pui_msgs::msg::MultiRange>::SharedPtr uwb_subscriber_;
