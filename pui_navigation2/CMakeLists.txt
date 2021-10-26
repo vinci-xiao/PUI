@@ -20,7 +20,7 @@ find_package(ament_cmake REQUIRED)
 find_package(slam_toolbox REQUIRED)
 
 install(
-  DIRECTORY launch params
+  DIRECTORY launch params maps
   DESTINATION share/${PROJECT_NAME}
 )
 
