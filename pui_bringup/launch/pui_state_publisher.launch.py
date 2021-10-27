@@ -11,6 +11,7 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
 
     use_sim_time = LaunchConfiguration('use_sim_time', default='false')
+    namespace = LaunchConfiguration('namespace', default='')
     urdf_file_name = 'pui_bot' + '.urdf'
     pkg_share = FindPackageShare(package='pui_description').find('pui_description')
     default_model_path = os.path.join(pkg_share, 'urdf/pui_bot.urdf')
@@ -19,8 +20,7 @@ def generate_launch_description():
 
     urdf = os.path.join(
         get_package_share_directory('pui_description'),
-        'urdf',
-        urdf_file_name)
+        'urdf',urdf_file_name)
 
     # Major refactor of the robot_state_publisher
     # Reference page: https://github.com/ros2/demos/pull/426
@@ -32,25 +32,25 @@ def generate_launch_description():
     print (robot_desc) # Printing urdf information.
 
     return LaunchDescription([
-        DeclareLaunchArgument
-        (
+        DeclareLaunchArgument(
+            'namespace',
+            default_value=namespace,
+            description='Top-level namespace'),
+
+        DeclareLaunchArgument(
             'use_sim_time',
             default_value='false',
-            description='Use simulation (Gazebo) clock if true'
-        ),
+            description='Use simulation (Gazebo) clock if true'),
 
-        DeclareLaunchArgument
-        (
+        DeclareLaunchArgument(
             name='model',
             default_value=default_model_path,
-            description='Absolute path to robot urdf file'
-        ),
+            description='Absolute path to robot urdf file'),
 
-        Node
-        (
+        Node(
+            namespace=[namespace],
             package='robot_state_publisher',
             executable='robot_state_publisher',
             output='screen',
-            parameters=[rsp_params, {'use_sim_time': use_sim_time,'robot_description': Command(['xacro ', LaunchConfiguration('model')])}]
-        )
+            parameters=[rsp_params, {'use_sim_time': use_sim_time,'robot_description': Command(['xacro ', LaunchConfiguration('model')])}])
     ])
