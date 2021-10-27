@@ -103,8 +103,11 @@ void setup()
   //create init_options
   RCCHECK(rclc_support_init(&support, 0, NULL, &allocator));
 
+  rcl_node_options_t node_ops = rcl_node_get_default_options();
+  node_ops.domain_id = 73;
+  
   // create node
-  RCCHECK(rclc_node_init_default(&node, "uwb_teensy_node", "", &support));
+  RCCHECK(rclc_node_init_with_options(&node, "uwb_micro_ros_node", "", &support, &node_ops));
 
   // create publisher
   RCCHECK(rclc_publisher_init_default(
