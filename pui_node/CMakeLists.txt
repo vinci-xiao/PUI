@@ -41,14 +41,10 @@ include_directories(
 add_library(${PROJECT_NAME}_lib
 
   "src/diff_drive_controller.cpp"
-  "src/dynamixel_controller.cpp"
+  # "src/dynamixel_controller.cpp"
   "src/odometry.cpp"
   "src/pui.cpp"
 
-  # "src/sensors/battery_state.cpp"
-  # "src/sensors/imu.cpp"
-  # "src/sensors/joint_state.cpp"
-  # "src/sensors/sensor_state.cpp"
 )
 
 set(DEPENDENCIES
@@ -79,7 +75,7 @@ ament_target_dependencies(dynamixel_controller ${DEPENDENCIES})
 ################################################################################
 # Install
 ################################################################################
-install(DIRECTORY param include
+install(DIRECTORY param include launch
   DESTINATION share/${PROJECT_NAME}
 )
 
