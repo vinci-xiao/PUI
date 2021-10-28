@@ -4,8 +4,15 @@
 #sudo udevadm control --reload-rules
 #sudo udevadm trigger
 
-// pui_node
+// motor driver
 ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6014", ATTRS{serial}=="FT5WJ8BL", ENV{ID_MM_DEVICE_IGNORE}="1", MODE="666", SYMLINK+="pui_dynamixel"
 
-// pui_teleop
-KERNEL=="event[0-9]*", SUBSYSTEM=="input", ATTRS{name}=="js0", ACTION=="add", SYMLINK+="logitech_f710", MODE="666"
+// pui_teleop (controller)
+// KERNEL=="event[0-9]*", SUBSYSTEM=="input", ATTRS{name}=="js0", ACTION=="add", SYMLINK+="logitech_f710", MODE="666"
+// ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c21f", SUBSYSTEM=="input", MODE="666", SYMLINK+="pui_joy"
+
+// pui_uwb
+ATTRS{idVendor}=="2341", ATTRS{idProduct}=="005e", ATTRS{serial}=="497215501C729C48", ENV{ID_MM_DEVICE_IGNORE}="1", MODE="666", SYMLINK+="pui_uwb"
+
+// perception
+ATTRS{idVendor}=="2639", ATTRS{idProduct}=="0300", ATTRS{serial}=="DB1E7E2P", MODE="666", SYMLINK+="pui_imu"
