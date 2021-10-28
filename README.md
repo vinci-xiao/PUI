@@ -3,8 +3,18 @@
 ## cheat-sheet
 #### remote control
 ```
-ros2 run pui_node dynamixel_controller
+ros2 launch pui_node drive_launch.py
 ros2 launch pui_teleop pui_teleop_launch.py
+```
+
+#### Navigation 2 for pui_t2
+```
+ros2 launch pui_node drive_launch.py namespace:=t2
+
+ros2 launch pui_bringup robot.launch.py namespace:=t2
+
+ros2 launch nav2_bringup bringup_launch.py autostart:=False map:=$(ros2 pkg prefix pui_navigation2)/share/pui_navigation2/maps/map_10153.yaml params_file:=$(ros2 pkg prefix pui_navigation2)/share/pui_navigation2/params/nav2_params.yaml use_sim_time:=False use_namespace:=true namespace:=t2
+
 ```
 
 #### build map
@@ -22,7 +32,7 @@ ros2 service call /map_saver/save_map nav2_msgs/srv/SaveMap "{map_topic: map, ma
 ros2 run nav2_map_server map_saver_cli -f ~/map_name
 ```
 
-#### navigating
+#### Navigation 2 for pui_bot (master)
 ```
 ros2 launch pui_bringup robot.launch.py
 
@@ -30,7 +40,7 @@ ros2 launch pui_bringup velodyne_all_launch.py
 
 ros2 launch bluespace_ai_xsens_mti_driver xsens_mti_node.launch.py
 
-ros2 run pui_node dynamixel_controller
+ros2 launch pui_node drive_launch.py
 
 ros2 launch nav2_bringup bringup_launch.py autostart:=False map:=$(ros2 pkg prefix pui_navigation2)/share/pui_navigation2/maps/map_10153.yaml params_file:=$(ros2 pkg prefix pui_navigation2)/share/pui_navigation2/params/nav2_params.yaml use_sim_time:=False
 
@@ -39,8 +49,6 @@ ros2 run rviz2 rviz2 -d $(ros2 pkg prefix nav2_bringup)/share/nav2_bringup/rviz/
 
 -> Click on the 2D Pose Estimate button and point the location of the robot on the map.
 -> Send a Goal Pose by using Nav2 Goal
-
-
 
 #### micro-ros
 ```
