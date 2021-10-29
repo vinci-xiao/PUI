@@ -57,6 +57,11 @@ ros2 run rviz2 rviz2 -d $(ros2 pkg prefix nav2_bringup)/share/nav2_bringup/rviz/
 -> Click on the 2D Pose Estimate button and point the location of the robot on the map.
 -> Send a Goal Pose by using Nav2 Goal
 
+##### publish initial_pose topic 
+```
+ros2 topic pub /initialpose geometry_msgs/PoseWithCovarianceStamped '{ header: {stamp: {sec: 0, nanosec: 0}, frame_id: "map"}, pose: { pose: {position: {x: 3.5826, y: 1.3826, z: 0.0}, orientation: {x: 0, y: 0, z: 0, w: 0.4439}}, } }'
+```
+
 #### micro-ros
 ```
 ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyACM0 -b 115200 -v 6
