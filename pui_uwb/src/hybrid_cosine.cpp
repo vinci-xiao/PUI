@@ -11,6 +11,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
 #include "geometry_msgs/msg/pose.hpp"
+#include "geometry_msgs/msg/pose_with_covariance_stamped.hpp"
 #include "geometry_msgs/msg/transform_stamped.hpp"
 
 #include <tf2/exceptions.h>
@@ -39,9 +40,10 @@ public:
     {
         tag_publisher_ = this->create_publisher<geometry_msgs::msg::Pose>("tag_position", 3);
         uwb_subscriber_ = this->create_subscription<pui_msgs::msg::MultiRange>(
-            "uwb_range", 10, std::bind(&HybridCosine::uwb_callback, this, std::placeholders::_1));
+            "uwb_range", 5, std::bind(&HybridCosine::uwb_callback, this, std::placeholders::_1));
         tf_buffer_ = std::make_unique<tf2_ros::Buffer>(this->get_clock());
         transform_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
+        initpose_publisher_ = this->create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>("initial_pose", 1);
 
         get_static_tf();
     }
@@ -114,6 +116,8 @@ private:
     }
     void uwb_callback(pui_msgs::msg::MultiRange::SharedPtr msg) 
     {
+        static bool is_first_time = true;
+        static auto init_p = geometry_msgs::msg::PoseWithCovarianceStamped();
         static auto p = geometry_msgs::msg::Pose();
         static double r1,r2,r3 = 0;
         static double measured_angle_an1, measured_angle_an2;
@@ -156,7 +160,21 @@ private:
             }
         }
 
-        tag_publisher_->publish(p);
+        if(is_first_time)
+        {
+            init_p.pose.pose = p;
+            init_p.header.frame_id = "map";
+            RCLCPP_INFO(this->get_logger(), "Tag Init Position: %lf, %lf, %lf", init_p.pose.pose.position.x, init_p.pose.pose.position.y, init_p.pose.pose.position.z);
+            RCLCPP_INFO(this->get_logger(), "Tag Init Ovirentation: %lf, %lf, %lf, %lf", init_p.pose.pose.orientation.x, init_p.pose.pose.orientation.y, init_p.pose.pose.orientation.z, init_p.pose.pose.orientation.w);
+
+            initpose_publisher_->publish(init_p);
+            is_first_time = false;
+        }
+        else
+        {
+            tag_publisher_->publish(p);
+        }
+
     }
     bool is_rear(double measure_val,double fix_angle) 
     {
@@ -173,6 +191,8 @@ private:
     rclcpp::Subscription<pui_msgs::msg::MultiRange>::SharedPtr uwb_subscriber_;
     std::shared_ptr<tf2_ros::TransformListener> transform_listener_{nullptr};
     std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
+    rclcpp::Publisher<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr initpose_publisher_;
+
 };
 
 int main(int argc, char **argv)
