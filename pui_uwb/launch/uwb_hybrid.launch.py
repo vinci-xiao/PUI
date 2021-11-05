@@ -14,7 +14,7 @@ def generate_launch_description():
         # params = yaml.safe_load(f)["following_node"]["ros__parameters"]
 
     node1= Node(
-        namespace='t2',
+        namespace='',
         package = 'pui_uwb',
         name = 'hybrid_cosine',
         executable = 'hybrid_cosine',
