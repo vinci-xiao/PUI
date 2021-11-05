@@ -4,8 +4,8 @@
 #sudo udevadm control --reload-rules
 #sudo udevadm trigger
 
-// motor driver
-ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6014", ATTRS{serial}=="FT5WJ8BL", ENV{ID_MM_DEVICE_IGNORE}="1", MODE="666", SYMLINK+="pui_dynamixel"
+// motor driver  //masterATTRS{serial}=="FT5NSN1N"
+ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6014", ENV{ID_MM_DEVICE_IGNORE}="1", MODE="666", SYMLINK+="pui_dynamixel"
 
 // pui_teleop (controller)
 // KERNEL=="event[0-9]*", SUBSYSTEM=="input", ATTRS{name}=="js0", ACTION=="add", SYMLINK+="logitech_f710", MODE="666"
