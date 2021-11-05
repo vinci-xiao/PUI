@@ -15,7 +15,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
 
     # Create the launch configuration variables
-    # usb_port = LaunchConfiguration('usb_port', default='/dev/ttyUSB0')
+    usb_port = LaunchConfiguration('usb_port', default='/dev/pui_dynamixel')
     namespace = LaunchConfiguration('namespace', default='')
 
     return LaunchDescription([
@@ -24,15 +24,15 @@ def generate_launch_description():
             default_value=namespace,
             description='Top-level namespace'),
 
-        # DeclareLaunchArgument(
-        #     'usb_port',
-        #     default_value=usb_port,
-        #     description='Connected USB port with U2D2'),
+        DeclareLaunchArgument(
+            'usb_port',
+            default_value=usb_port,
+            description='Connected USB port with U2D2'),
 
         Node(
             namespace=[namespace],
             package='pui_node',
             executable='dynamixel_controller',
-            # arguments=['-i', usb_port],
+            arguments=['-i', usb_port],
             output='screen'),
     ])
