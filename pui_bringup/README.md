@@ -7,7 +7,7 @@
 'cd ~/pui_ws && colcon build --symlink-install'
 'sudo chmod a+rw /dev/ttyUSB0'
 
-### Find USB devics info 
+### Find USB devices info 
 ```
 udevadm info -a -n /dev/ttyUSB0 | grep '{serial}'
 udevadm info -a -n /dev/ttyUSB0 | grep '{devpath}'
