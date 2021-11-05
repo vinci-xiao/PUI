@@ -4,6 +4,7 @@ import yaml
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch_ros.actions import Node
+
 def generate_launch_description():
     ld = LaunchDescription()
 
@@ -13,7 +14,7 @@ def generate_launch_description():
         # params = yaml.safe_load(f)["following_node"]["ros__parameters"]
 
     node1= Node(
-        # namespace='tag1',
+        namespace='t2',
         package = 'pui_uwb',
         name = 'hybrid_cosine',
         executable = 'hybrid_cosine',
