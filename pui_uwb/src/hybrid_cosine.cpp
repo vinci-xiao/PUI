@@ -31,6 +31,8 @@ double x3_, y3_, z3_;
 double base_anchor_, length_an01_,length_an02_;
 double angle_an1_, angle_an2_;
 double length_platform_;
+auto init_p = geometry_msgs::msg::PoseWithCovarianceStamped();
+
 /////////////////////////////////////////////////////////////////////////////////////
 class HybridCosine : public rclcpp::Node
 {
@@ -46,6 +48,21 @@ public:
         initpose_publisher_ = this->create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>("initial_pose", 1);
 
         get_static_tf();
+        get_parameters();
+    }
+    void get_parameters(void)
+    {
+      this->declare_parameter<std::double_t>("initial_pose/x", 0.0);
+      this->declare_parameter<std::double_t>("initial_pose/y", 0.0);
+      this->declare_parameter<std::double_t>("initial_pose/z", 0.0);
+      this->declare_parameter<std::double_t>("initial_pose/theta", 0.0);
+      
+      this->get_parameter("initial_pose/x", init_p.pose.pose.position.x);
+      this->get_parameter("initial_pose/y", init_p.pose.pose.position.y);
+      this->get_parameter("initial_pose/z", init_p.pose.pose.position.z);
+      this->get_parameter("initial_pose/theta", init_p.pose.pose.orientation.w);
+
+      RCLCPP_INFO(this->get_logger(), "init_pose: x=%lf",init_p.pose.pose.position.x);
     }
 private:
     void get_static_tf(void)
@@ -117,7 +134,6 @@ private:
     void uwb_callback(pui_msgs::msg::MultiRange::SharedPtr msg) 
     {
         static bool is_first_time = true;
-        static auto init_p = geometry_msgs::msg::PoseWithCovarianceStamped();
         static auto p = geometry_msgs::msg::Pose();
         static double r1,r2,r3 = 0;
         static double measured_angle_an1, measured_angle_an2;
@@ -164,10 +180,19 @@ private:
         {
             init_p.pose.pose = p;
             init_p.header.frame_id = "map";
+
+            // publish the /initialpose directly
+            // initpose_publisher_->publish(init_p);
+
+            // or set the init_pose parameters instead
+            this->set_parameter(rclcpp::Parameter("initial_pose/x", init_p.pose.pose.position.x));
+            this->set_parameter(rclcpp::Parameter("initial_pose/y", init_p.pose.pose.position.y));
+            this->set_parameter(rclcpp::Parameter("initial_pose/z", init_p.pose.pose.position.z));
+            this->set_parameter(rclcpp::Parameter("initial_pose/theta", init_p.pose.pose.orientation.w));
+
             RCLCPP_INFO(this->get_logger(), "Tag Init Position: %lf, %lf, %lf", init_p.pose.pose.position.x, init_p.pose.pose.position.y, init_p.pose.pose.position.z);
             RCLCPP_INFO(this->get_logger(), "Tag Init Ovirentation: %lf, %lf, %lf, %lf", init_p.pose.pose.orientation.x, init_p.pose.pose.orientation.y, init_p.pose.pose.orientation.z, init_p.pose.pose.orientation.w);
 
-            initpose_publisher_->publish(init_p);
             is_first_time = false;
         }
         else
