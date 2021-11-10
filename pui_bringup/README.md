@@ -6,6 +6,7 @@
 'git clone -b $ROS_DISTRO-devel https://github.com/ROBOTIS-GIT/DynamixelSDK'
 'cd ~/pui_ws && colcon build --symlink-install'
 'sudo chmod a+rw /dev/ttyUSB0'
+'sudo usermod -aG dialout pui'
 
 ### Find USB devices info 
 ```
