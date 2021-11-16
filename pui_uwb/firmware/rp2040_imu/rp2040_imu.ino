@@ -30,6 +30,9 @@ rcl_timer_t timer;
 float Ax, Ay, Az;
 float Gx, Gy, Gz;
 
+#define dps2rps 0.017453292
+#define G 9.81
+
 void error_loop(){
   while(1){
     digitalWrite(LED_PIN, !digitalRead(LED_PIN));
@@ -68,14 +71,14 @@ void setup() {
   RCCHECK(rclc_support_init(&support, 0, NULL, &allocator));
 
   // create node
-  RCCHECK(rclc_node_init_default(&node, "micro_ros_arduino_node", "", &support));
+  RCCHECK(rclc_node_init_default(&node, "imu_rp2040_node", "", &support));
 
   // create publisher
   RCCHECK(rclc_publisher_init_default(
     &publisher,
     &node,
     ROSIDL_GET_MSG_TYPE_SUPPORT(sensor_msgs, msg, Imu),
-    "micro_ros_arduino_node_publisher"));
+    "imu_rp2040"));
 
   // create timer,
   const unsigned int timer_timeout = 1000;
@@ -95,14 +98,16 @@ void loop() {
 
   if (IMU.accelerationAvailable()) {
     IMU.readAcceleration(Ax, Ay, Az);
-    imu_msg.linear_acceleration.x = Ax;
-    imu_msg.linear_acceleration.y = Ay;
-    imu_msg.linear_acceleration.z = Az;
-
+    imu_msg.linear_acceleration.x = Ax*G;
+    imu_msg.linear_acceleration.y = Ay*G;
+    imu_msg.linear_acceleration.z = Az*G;
   }
 
   if (IMU.gyroscopeAvailable()) {
     IMU.readGyroscope(Gx, Gy, Gz);
+    imu_msg.angular_velocity.x = Gx*dps2rps;
+    imu_msg.angular_velocity.y = Gy*dps2rps;
+    imu_msg.angular_velocity.z = Gz*dps2rps;
   }
   
   delay(100);
