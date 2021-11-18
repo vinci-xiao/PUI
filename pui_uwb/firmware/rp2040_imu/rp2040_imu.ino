@@ -103,6 +103,9 @@ void setup() {
   RCCHECK(rclc_executor_init(&executor, &support.context, 1, &allocator));
   RCCHECK(rclc_executor_add_timer(&executor, &timer));
 
+  // set frame_id
+  imu_msg.header.frame_id.data = "imu_link";
+  imu_msg.header.frame_id.size = strlen(imu_msg.header.frame_id.data);
 }
 
 void loop() {
@@ -110,13 +113,6 @@ void loop() {
   // Synchronize time
   RCCHECK(rmw_uros_sync_session(timeout_ms));
   time_ms = rmw_uros_epoch_millis(); 
-
-  if (time_ms > 0)
-  {
-    time_seconds = time_ms/1000;
-    setTime(time_seconds); 
-//    sprintf(time_str, "%02d.%02d.%04d %02d:%02d:%02d.%03d", day(), month(), year(), hour(), minute(), second(), (uint) time_ms % 1000);
-  }
   
   if (IMU.accelerationAvailable()) {
     IMU.readAcceleration(Ax, Ay, Az);
@@ -135,14 +131,15 @@ void loop() {
   }
 
   if (is_acc&&is_gyr){
-//    imu_msg.header.frame_id = "imu_link";
+    // ros time stamp
     imu_msg.header.stamp.sec =(int32_t)time_ms/1000;
     imu_msg.header.stamp.nanosec =(uint32_t)time_ms%1000;
 
+    // publish imu topic
     RCSOFTCHECK(rclc_executor_spin_some(&executor, RCL_MS_TO_NS(100)));
+
+    // reset flags
     is_acc =false;    
     is_gyr =false;
   }
-  
-//  delay(100);
 }
