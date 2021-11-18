@@ -40,7 +40,7 @@ bool is_gyr =false;
 #define G 9.81
 
 const int timeout_ms = 1000;
-static int64_t time_ms;
+static int64_t time_ns;
 static time_t time_seconds;
 char time_str[25];
 
@@ -112,7 +112,12 @@ void loop() {
   
   // Synchronize time
   RCCHECK(rmw_uros_sync_session(timeout_ms));
-  time_ms = rmw_uros_epoch_millis(); 
+  time_ns = rmw_uros_epoch_nanos();
+  if (time_ns > 0)
+  {
+    time_seconds = time_ns/1000000000;
+    setTime(time_seconds); 
+  }
   
   if (IMU.accelerationAvailable()) {
     IMU.readAcceleration(Ax, Ay, Az);
@@ -132,9 +137,11 @@ void loop() {
 
   if (is_acc&&is_gyr){
     // ros time stamp
-    imu_msg.header.stamp.sec =(int32_t)time_ms/1000;
-    imu_msg.header.stamp.nanosec =(uint32_t)time_ms%1000;
-
+//    imu_msg.header.stamp.sec =(int32_t)time_ms/1000;
+//    imu_msg.header.stamp.nanosec =(uint32_t)time_ms%1000;
+    imu_msg.header.stamp.sec =(int32_t)time_seconds;
+    imu_msg.header.stamp.nanosec =(uint32_t)time_ns%1000000000;
+    
     // publish imu topic
     RCSOFTCHECK(rclc_executor_spin_some(&executor, RCL_MS_TO_NS(100)));
 
