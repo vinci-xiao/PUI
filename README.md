@@ -16,9 +16,9 @@ ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/pui_uwb -b 115200 -v6
 
 #### Navigation 2 for pui_t2
 ```
-ros2 launch pui_node drive_launch.py namespace:=t2
-
 ros2 launch pui_bringup robot.launch.py namespace:=t2
+
+ros2 launch pui_node drive_launch.py namespace:=t2
 
 ros2 launch nav2_bringup bringup_launch.py autostart:=False map:=$(ros2 pkg prefix pui_navigation2)/share/pui_navigation2/maps/map_10153.yaml params_file:=$(ros2 pkg prefix pui_navigation2)/share/pui_navigation2/params/nav2_params.yaml use_sim_time:=False use_namespace:=true namespace:=t2
 
