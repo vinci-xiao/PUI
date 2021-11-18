@@ -1,12 +1,16 @@
+// ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyACM0 -b 115200 -v 6
+
 #include <Arduino_LSM6DSOX.h>
 
 #include <micro_ros_arduino.h>
 
 #include <stdio.h>
+#include <TimeLib.h>
 #include <rcl/rcl.h>
 #include <rcl/error_handling.h>
 #include <rclc/rclc.h>
 #include <rclc/executor.h>
+#include <rmw_microros/rmw_microros.h>
 
 #include <std_msgs/msg/int32.h>
 #include <sensor_msgs/msg/imu.h>
@@ -29,9 +33,16 @@ rcl_timer_t timer;
 
 float Ax, Ay, Az;
 float Gx, Gy, Gz;
+bool is_acc =false;
+bool is_gyr =false;
 
 #define dps2rps 0.017453292
 #define G 9.81
+
+const int timeout_ms = 1000;
+static int64_t time_ms;
+static time_t time_seconds;
+char time_str[25];
 
 void error_loop(){
   while(1){
@@ -95,12 +106,24 @@ void setup() {
 }
 
 void loop() {
+  
+  // Synchronize time
+  RCCHECK(rmw_uros_sync_session(timeout_ms));
+  time_ms = rmw_uros_epoch_millis(); 
 
+  if (time_ms > 0)
+  {
+    time_seconds = time_ms/1000;
+    setTime(time_seconds); 
+//    sprintf(time_str, "%02d.%02d.%04d %02d:%02d:%02d.%03d", day(), month(), year(), hour(), minute(), second(), (uint) time_ms % 1000);
+  }
+  
   if (IMU.accelerationAvailable()) {
     IMU.readAcceleration(Ax, Ay, Az);
     imu_msg.linear_acceleration.x = Ax*G;
     imu_msg.linear_acceleration.y = Ay*G;
     imu_msg.linear_acceleration.z = Az*G;
+    is_acc =true;
   }
 
   if (IMU.gyroscopeAvailable()) {
@@ -108,8 +131,18 @@ void loop() {
     imu_msg.angular_velocity.x = Gx*dps2rps;
     imu_msg.angular_velocity.y = Gy*dps2rps;
     imu_msg.angular_velocity.z = Gz*dps2rps;
+    is_gyr =true;
+  }
+
+  if (is_acc&&is_gyr){
+//    imu_msg.header.frame_id = "imu_link";
+    imu_msg.header.stamp.sec =(int32_t)time_ms/1000;
+    imu_msg.header.stamp.nanosec =(uint32_t)time_ms%1000;
+
+    RCSOFTCHECK(rclc_executor_spin_some(&executor, RCL_MS_TO_NS(100)));
+    is_acc =false;    
+    is_gyr =false;
   }
   
-  delay(100);
-  RCSOFTCHECK(rclc_executor_spin_some(&executor, RCL_MS_TO_NS(100)));
+//  delay(100);
 }
