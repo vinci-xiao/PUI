@@ -42,7 +42,7 @@ public:
     {
         tag_publisher_ = this->create_publisher<geometry_msgs::msg::Pose>("tag_position", 3);
         uwb_subscriber_ = this->create_subscription<pui_msgs::msg::MultiRange>(
-            "uwb_range", 5, std::bind(&HybridCosine::uwb_callback, this, std::placeholders::_1));
+            "/uwb_range", 5, std::bind(&HybridCosine::uwb_callback, this, std::placeholders::_1));
         tf_buffer_ = std::make_unique<tf2_ros::Buffer>(this->get_clock());
         transform_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
         initpose_publisher_ = this->create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>("initial_pose", 1);
