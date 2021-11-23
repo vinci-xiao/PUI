@@ -7,6 +7,12 @@ ros2 launch pui_node drive_launch.py
 ros2 launch pui_teleop pui_teleop_launch.py
 ```
 
+#### pui_t2
+```
+ros2 launch pui_node drive_launch.py namespace:=t2
+ros2 launch bluespace_ai_xsens_mti_driver name_imu.launch.py namespace:=t2
+```
+
 #### test uwb for init_pose
 prerequist:
     ```ros2 launch pui_bringup robot.launch.py```
