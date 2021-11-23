@@ -17,7 +17,7 @@ ros2 launch pui_uwb uwb_hybrid.launch.py
 
 #### Navigation 2 for pui_t2
 ```
-ros2 launch pui_bringup robot.launch.py namespace:=t2
+ros2 launch pui_bringup robot.launch.py use_namespace:=True namespace:=t2
 
 ros2 launch bluespace_ai_xsens_mti_driver name_imu.launch.py namespace:=t2
 
@@ -44,7 +44,7 @@ ros2 run nav2_map_server map_saver_cli -f ~/map_name
 
 #### Navigation 2 for pui_bot (master)
 ```
-ros2 launch pui_bringup robot.launch.py
+ros2 launch pui_bringup robot.launch.py use_namespace:=False
 
 ros2 launch pui_bringup velodyne_all_launch.py
 
