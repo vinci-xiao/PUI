@@ -45,22 +45,22 @@ public:
             "/uwb_range", 5, std::bind(&HybridCosine::uwb_callback, this, std::placeholders::_1));
         tf_buffer_ = std::make_unique<tf2_ros::Buffer>(this->get_clock());
         transform_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
-        initpose_publisher_ = this->create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>("initial_pose", 1);
+        initpose_publisher_ = this->create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>("/t2/initialpose", 1);
 
         get_static_tf();
         get_parameters();
     }
     void get_parameters(void)
     {
-      this->declare_parameter<std::double_t>("initial_pose/x", 0.0);
-      this->declare_parameter<std::double_t>("initial_pose/y", 0.0);
-      this->declare_parameter<std::double_t>("initial_pose/z", 0.0);
-      this->declare_parameter<std::double_t>("initial_pose/theta", 0.0);
+      this->declare_parameter<std::double_t>("/t2/initialpose/x", 0.0);
+      this->declare_parameter<std::double_t>("/t2/initialpose/y", 0.0);
+      this->declare_parameter<std::double_t>("/t2/initialpose/z", 0.0);
+      this->declare_parameter<std::double_t>("/t2/initialpose/theta", 0.0);
       
-      this->get_parameter("initial_pose/x", init_p.pose.pose.position.x);
-      this->get_parameter("initial_pose/y", init_p.pose.pose.position.y);
-      this->get_parameter("initial_pose/z", init_p.pose.pose.position.z);
-      this->get_parameter("initial_pose/theta", init_p.pose.pose.orientation.w);
+      this->get_parameter("/t2/initialpose/x", init_p.pose.pose.position.x);
+      this->get_parameter("/t2/initialpose/y", init_p.pose.pose.position.y);
+      this->get_parameter("/t2/initialpose/z", init_p.pose.pose.position.z);
+      this->get_parameter("/t2/initialpose/theta", init_p.pose.pose.orientation.w);
 
       RCLCPP_INFO(this->get_logger(), "init_pose: x=%lf",init_p.pose.pose.position.x);
     }
@@ -185,10 +185,10 @@ private:
             // initpose_publisher_->publish(init_p);
 
             // or set the init_pose parameters instead
-            this->set_parameter(rclcpp::Parameter("initial_pose/x", init_p.pose.pose.position.x));
-            this->set_parameter(rclcpp::Parameter("initial_pose/y", init_p.pose.pose.position.y));
-            this->set_parameter(rclcpp::Parameter("initial_pose/z", init_p.pose.pose.position.z));
-            this->set_parameter(rclcpp::Parameter("initial_pose/theta", init_p.pose.pose.orientation.w));
+            this->set_parameter(rclcpp::Parameter("/t2/initialpose/x", init_p.pose.pose.position.x));
+            this->set_parameter(rclcpp::Parameter("/t2/initialpose/y", init_p.pose.pose.position.y));
+            this->set_parameter(rclcpp::Parameter("/t2/initialpose/z", init_p.pose.pose.position.z));
+            this->set_parameter(rclcpp::Parameter("/t2/initialpose/theta", init_p.pose.pose.orientation.w));
 
             RCLCPP_INFO(this->get_logger(), "Tag Init Position: %lf, %lf, %lf", init_p.pose.pose.position.x, init_p.pose.pose.position.y, init_p.pose.pose.position.z);
             RCLCPP_INFO(this->get_logger(), "Tag Init Ovirentation: %lf, %lf, %lf, %lf", init_p.pose.pose.orientation.x, init_p.pose.pose.orientation.y, init_p.pose.pose.orientation.z, init_p.pose.pose.orientation.w);
