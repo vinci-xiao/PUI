@@ -8,10 +8,11 @@ ros2 launch pui_teleop pui_teleop_launch.py
 ```
 
 #### test uwb for init_pose
+prerequist:
+    ```ros2 launch pui_bringup robot.launch.py```
 ```
-ros2 launch pui_bringup robot.launch.py namespace:=t2
-ros2 launch pui_uwb uwb_hybrid.launch.py namespace:=t2
 ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/pui_uwb -b 115200 -v6
+ros2 launch pui_uwb uwb_hybrid.launch.py
 ```
 
 #### Navigation 2 for pui_t2
