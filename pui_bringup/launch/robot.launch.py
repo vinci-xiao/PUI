@@ -13,12 +13,14 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
-    # TURTLEBOT3_MODEL = os.environ['TURTLEBOT3_MODEL']
+    # Get the launch directory
+    bringup_dir = get_package_share_directory('pui_bringup')
+    launch_dir = os.path.join(bringup_dir, 'launch')
 
     # Create the launch configuration variables
-
     usb_port = LaunchConfiguration('usb_port', default='/dev/ttyUSB0')
     use_sim_time = LaunchConfiguration('use_sim_time', default='false')
+    use_namespace = LaunchConfiguration('use_namespace', default='false')
     namespace = LaunchConfiguration('namespace', default='')
 
     pui_param_dir = LaunchConfiguration(
@@ -28,6 +30,11 @@ def generate_launch_description():
             'param','burger' + '.yaml'))
 
     return LaunchDescription([
+        DeclareLaunchArgument(
+            'use_namespace',
+            default_value='false',
+            description='Whether to apply a namespace to the navigation stack'),
+
         DeclareLaunchArgument(
             'namespace',
             default_value=namespace,
@@ -49,9 +56,21 @@ def generate_launch_description():
             description='Full path to pui parameter file to load'),
 
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                [ThisLaunchFileDir(), '/pui_state_publisher.launch.py']),
-            launch_arguments={'use_sim_time': use_sim_time}.items(),
+            PythonLaunchDescriptionSource(os.path.join(launch_dir, 'pui_state_publisher.launch.py')),
+            condition=IfCondition(PythonExpression(['not ', use_namespace])),
+            launch_arguments={
+                'use_sim_time': use_sim_time,
+                'namespace': namespace,
+            }.items(),
+        ),
+
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(os.path.join(launch_dir, 'pui_tag_publisher.launch.py')),
+            condition=IfCondition(use_namespace),
+            launch_arguments={
+                'use_sim_time': use_sim_time,
+                'namespace': namespace,
+            }.items(),
         ),
 
         Node(
