@@ -4,37 +4,28 @@ import yaml
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch_ros.actions import Node
+from launch.substitutions import LaunchConfiguration, PythonExpression
+from launch.actions import (DeclareLaunchArgument, GroupAction,
+                            IncludeLaunchDescription, SetEnvironmentVariable)
 
 def generate_launch_description():
-    ld = LaunchDescription()
 
-    # params_dir = os.path.join(get_package_share_directory('pui_uwb'), 'params')
-    # param_config = os.path.join(params_dir, "uwb.yaml")
-    # with open(param_config, 'r') as f:
-        # params = yaml.safe_load(f)["following_node"]["ros__parameters"]
+    namespace = LaunchConfiguration('namespace', default='')
 
-    node1= Node(
-        namespace='',
-        package = 'pui_uwb',
-        name = 'hybrid_cosine',
-        executable = 'hybrid_cosine',
-        # parameters= [
-        #             params,
-        #             {"tag_id": 2}
-        #             ]
-    )
+    return LaunchDescription([
+        DeclareLaunchArgument(
+            'namespace',
+            default_value=namespace,
+            description='Top-level namespace'),
 
-    # node2= Node(
-    #     namespace='tag2',
-    #     package = 'pui_uwb',
-    #     name = 'following_node',
-    #     executable = 'following_node',
-    #     parameters= [
-    #                 params,
-    #                 {"tag_id": 1}
-    #                 ]
-    # )
-
-    ld.add_action(node1)
-    # ld.add_action(node2)
-    return ld
+        Node(
+            namespace=[namespace],
+            package = 'pui_uwb',
+            name = 'hybrid_cosine',
+            executable = 'hybrid_cosine',
+            # parameters= [
+            #             params,
+            #             {"tag_id": 2}
+            #             ]
+            ),
+    ])

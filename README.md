@@ -17,9 +17,9 @@ ros2 launch pui_uwb uwb_hybrid.launch.py
 
 #### Navigation 2 for pui_t2
 ```
-ros2 launch bluespace_ai_xsens_mti_driver name_imu.launch.py namespace:=t2
-
 ros2 launch pui_bringup robot.launch.py namespace:=t2
+
+ros2 launch bluespace_ai_xsens_mti_driver name_imu.launch.py namespace:=t2
 
 ros2 launch pui_node drive_launch.py namespace:=t2
 
