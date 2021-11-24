@@ -27,7 +27,7 @@ ros2 launch pui_uwb uwb_hybrid.launch.py
  - on pui_master
 
     ```
-    ros2 launch nav2_bringup bringup_launch.py autostart:=False map:=$(ros2 pkg prefix pui_navigation2)/share/pui_navigation2/maps/map_10153.yaml params_file:=$(ros2 pkg prefix pui_navigation2)/share/pui_navigation2/params/nav2_params.yaml use_sim_time:=False use_namespace:=true namespace:=t2
+    ros2 launch nav2_bringup bringup_launch.py autostart:=False map:=$(ros2 pkg prefix pui_navigation2)/share/pui_navigation2/maps/map_10153.yaml params_file:=$(ros2 pkg prefix pui_navigation2)/share/pui_navigation2/params/t2_params.yaml use_sim_time:=Fals e use_namespace:=true namespace:=t2
 
     ros2 run rviz2 rviz2 -d $(ros2 pkg prefix pui_navigation2)/share/pui_navigation2/rviz/t2_default_view.rviz
     ```
