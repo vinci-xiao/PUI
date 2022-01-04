@@ -31,6 +31,10 @@ ros2 launch pui_uwb uwb_hybrid.launch.py
 
     ros2 run rviz2 rviz2 -d $(ros2 pkg prefix pui_navigation2)/share/pui_navigation2/rviz/t2_default_view.rviz
     ```
+#### test Rviz2 panel for multi-robot
+```
+ros2 run rviz2 rviz2 -d $(ros2 pkg prefix pui_navigation2)/share/pui_navigation2/rviz/nav2_custom_view.rviz
+```
 
 #### build map
 ```
