@@ -17,20 +17,21 @@ ros2 launch pui_uwb uwb_hybrid.launch.py
 
 #### Navigation 2 for pui_t2
  - on pui_t2
-    ```
-    ros2 launch pui_node drive_launch.py namespace:=t2
+```
+ros2 launch pui_node drive_launch.py namespace:=t2
 
-    ros2 launch bluespace_ai_xsens_mti_driver name_imu.launch.py namespace:=t2
+ros2 launch bluespace_ai_xsens_mti_driver name_imu.launch.py namespace:=t2
 
-    ros2 launch pui_bringup robot.launch.py use_namespace:=True namespace:=t2
-    ```
+ros2 launch pui_bringup robot.launch.py use_namespace:=True namespace:=t2
+```
+
  - on pui_master
+```
+ros2 launch nav2_bringup bringup_launch.py autostart:=False map:=$(ros2 pkg prefix pui_navigation2)/share/pui_navigation2/maps/map_10153.yaml params_file:=$(ros2 pkg prefix pui_navigation2)/share/pui_navigation2/params/t2_params.yaml use_sim_time:=False use_namespace:=true namespace:=t2
 
-    ```
-    ros2 launch nav2_bringup bringup_launch.py autostart:=False map:=$(ros2 pkg prefix pui_navigation2)/share/pui_navigation2/maps/map_10153.yaml params_file:=$(ros2 pkg prefix pui_navigation2)/share/pui_navigation2/params/t2_params.yaml use_sim_time:=False use_namespace:=true namespace:=t2
+ros2 run rviz2 rviz2 -d $(ros2 pkg prefix pui_navigation2)/share/pui_navigation2/rviz/t2_default_view.rviz
+```
 
-    ros2 run rviz2 rviz2 -d $(ros2 pkg prefix pui_navigation2)/share/pui_navigation2/rviz/t2_default_view.rviz
-    ```
 #### test Rviz2 panel for multi-robot
 ```
 ros2 run rviz2 rviz2 -d $(ros2 pkg prefix pui_navigation2)/share/pui_navigation2/rviz/nav2_custom_view.rviz
