@@ -28,6 +28,9 @@ def generate_launch_description():
                 'coalesce_interval_ms': 1,
             }]),
         launch_ros.actions.Node(
-            package='teleop_twist_joy', executable='teleop_node',
-            name='teleop_twist_joy_node', parameters=[config_filepath]),
+            package='teleop_twist_joy', 
+            executable='teleop_node',
+            name='teleop_twist_joy_node', 
+            parameters=[config_filepath]
+        ),
     ])
