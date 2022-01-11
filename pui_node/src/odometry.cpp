@@ -20,31 +20,15 @@ Odometry::Odometry(
 {
   RCLCPP_INFO(nh_->get_logger(), "Init Odometry");
 
-  nh_->declare_parameter("odometry.frame_id");
-  nh_->declare_parameter("odometry.child_frame_id");
+  nh_->declare_parameter<std::string>("odometry.frame_id", "t2/odom");
+  nh_->declare_parameter<std::string>("odometry.child_frame_id", "t2/base_footprint");
+  nh_->declare_parameter<bool>("odometry.use_imu", true);
+  nh_->declare_parameter<bool>("odometry.publish_tf", true);
 
-  nh_->declare_parameter("odometry.use_imu");
-  nh_->declare_parameter("odometry.publish_tf");
-
-  nh_->get_parameter_or<bool>(
-    "odometry.use_imu",
-    use_imu_,
-    false);
-
-  nh_->get_parameter_or<bool>(
-    "odometry.publish_tf",
-    publish_tf_,
-    false);
-
-  nh_->get_parameter_or<std::string>(
-    "odometry.frame_id",
-    frame_id_of_odometry_,
-    std::string("odom"));
-
-  nh_->get_parameter_or<std::string>(
-    "odometry.child_frame_id",
-    child_frame_id_of_odometry_,
-    std::string("base_footprint"));
+  nh_->get_parameter("odometry.use_imu", use_imu_);
+  nh_->get_parameter("odometry.publish_tf", publish_tf_);
+  nh_->get_parameter("odometry.frame_id", frame_id_of_odometry_);
+  nh_->get_parameter("odometry.child_frame_id", child_frame_id_of_odometry_);
 
   auto qos = rclcpp::QoS(rclcpp::KeepLast(10));
   odom_pub_ = nh_->create_publisher<nav_msgs::msg::Odometry>("odom", qos);
