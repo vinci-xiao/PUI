@@ -20,10 +20,10 @@ Odometry::Odometry(
 {
   RCLCPP_INFO(nh_->get_logger(), "Init Odometry");
 
-  nh_->declare_parameter<std::string>("odometry.frame_id", "t2/odom");
-  nh_->declare_parameter<std::string>("odometry.child_frame_id", "t2/base_footprint");
-  nh_->declare_parameter<bool>("odometry.use_imu", true);
-  nh_->declare_parameter<bool>("odometry.publish_tf", true);
+  nh_->declare_parameter<std::string>("odometry.frame_id", "odom");
+  nh_->declare_parameter<std::string>("odometry.child_frame_id", "base_footprint");
+  nh_->declare_parameter<bool>("odometry.use_imu", false);
+  nh_->declare_parameter<bool>("odometry.publish_tf", false);
 
   nh_->get_parameter("odometry.use_imu", use_imu_);
   nh_->get_parameter("odometry.publish_tf", publish_tf_);
