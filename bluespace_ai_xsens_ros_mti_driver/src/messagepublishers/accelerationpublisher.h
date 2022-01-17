@@ -69,13 +69,16 @@ struct AccelerationPublisher : public PacketCallback
 {
     rclcpp::Publisher<geometry_msgs::msg::Vector3Stamped>::SharedPtr pub;
     std::string frame_id = DEFAULT_FRAME_ID;
+    std::string ns="";
 
     AccelerationPublisher(rclcpp::Node &node)
     {
         int pub_queue_size = 5;
         node.get_parameter("publisher_queue_size", pub_queue_size);
-        pub = node.create_publisher<geometry_msgs::msg::Vector3Stamped>("/imu/acceleration", pub_queue_size);
+        pub = node.create_publisher<geometry_msgs::msg::Vector3Stamped>("imu/acceleration", pub_queue_size);
         node.get_parameter("frame_id", frame_id);
+        ns = node.get_namespace();
+        ns = ns.erase(0,1);
     }
 
     void operator()(const XsDataPacket &packet, rclcpp::Time timestamp)
@@ -85,7 +88,14 @@ struct AccelerationPublisher : public PacketCallback
             geometry_msgs::msg::Vector3Stamped msg;
 
             msg.header.stamp = timestamp;
-            msg.header.frame_id = frame_id;
+            if(ns=="")
+            {
+                msg.header.frame_id = frame_id;
+            }
+            else
+            {
+                msg.header.frame_id = ns +"/"+ frame_id;
+            }
 
             XsVector accel = packet.calibratedAcceleration();
 
