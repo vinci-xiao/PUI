@@ -27,7 +27,7 @@ def generate_launch_description():
         'pui_param_dir',
         default=os.path.join(
             get_package_share_directory('pui_bringup'),
-            'param','burger' + '.yaml'))
+            'param','burger','.yaml'))
 
     return LaunchDescription([
         DeclareLaunchArgument(
