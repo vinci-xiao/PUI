@@ -85,7 +85,7 @@ struct ImuPublisher : public PacketCallback, PublisherHelperFunctions
 
         int pub_queue_size = 5;
         node.get_parameter("publisher_queue_size", pub_queue_size);
-        pub = node.create_publisher<sensor_msgs::msg::Imu>("/imu/data", pub_queue_size);
+        pub = node.create_publisher<sensor_msgs::msg::Imu>("imu/data", pub_queue_size);
 
         // REP 145: Conventions for IMU Sensor Drivers (http://www.ros.org/reps/rep-0145.html)
         variance_from_stddev_param("orientation_stddev", orientation_variance, node);
@@ -134,10 +134,21 @@ struct ImuPublisher : public PacketCallback, PublisherHelperFunctions
             sensor_msgs::msg::Imu msg;
 
             std::string frame_id = DEFAULT_FRAME_ID;
+            std::string ns="";
+
             node_handle.get_parameter("frame_id", frame_id);
+            ns = node_handle.get_namespace();
+            ns = ns.erase(0,1);
 
             msg.header.stamp = timestamp;
-            msg.header.frame_id = frame_id;
+            if(ns=="")
+            {
+                msg.header.frame_id = frame_id;
+            }
+            else
+            {
+                msg.header.frame_id = ns +"/"+ frame_id;
+            }
 
             msg.orientation = quaternion;
             if (quaternion_available)

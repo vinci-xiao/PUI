@@ -70,6 +70,7 @@ struct MagneticFieldPublisher : public PacketCallback, PublisherHelperFunctions
 {
     rclcpp::Publisher<sensor_msgs::msg::MagneticField>::SharedPtr pub;
     std::string frame_id = DEFAULT_FRAME_ID;
+    std::string ns="";
     double magnetic_field_variance[3];
 
     MagneticFieldPublisher(rclcpp::Node &node)
@@ -79,8 +80,10 @@ struct MagneticFieldPublisher : public PacketCallback, PublisherHelperFunctions
 
         int pub_queue_size = 5;
         node.get_parameter("publisher_queue_size", pub_queue_size);
-        pub = node.create_publisher<sensor_msgs::msg::MagneticField>("/imu/mag", pub_queue_size);
+        pub = node.create_publisher<sensor_msgs::msg::MagneticField>("imu/mag", pub_queue_size);
         node.get_parameter("frame_id", frame_id);
+        ns = node.get_namespace();
+        ns = ns.erase(0,1);
         variance_from_stddev_param("magnetic_field_stddev", magnetic_field_variance, node);
     }
 
@@ -92,8 +95,15 @@ struct MagneticFieldPublisher : public PacketCallback, PublisherHelperFunctions
             sensor_msgs::msg::MagneticField msg;
 
             msg.header.stamp = timestamp;
-            msg.header.frame_id = frame_id;
-
+            if(ns=="")
+            {
+                msg.header.frame_id = frame_id;
+            }
+            else
+            {
+                msg.header.frame_id = ns +"/"+ frame_id;
+            }
+            
             XsVector mag = packet.calibratedMagneticField();
 
             msg.magnetic_field.x = mag[0];

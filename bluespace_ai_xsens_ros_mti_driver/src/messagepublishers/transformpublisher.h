@@ -70,10 +70,13 @@ struct TransformPublisher : public PacketCallback
 {
     tf2_ros::TransformBroadcaster tf_broadcaster;
     std::string frame_id = DEFAULT_FRAME_ID;
+    std::string ns="";
 
     TransformPublisher(rclcpp::Node &node) : tf_broadcaster(node)
     {
         node.get_parameter("frame_id", frame_id);
+        ns = node.get_namespace();
+        ns = ns.erase(0,1);
     }
 
     void operator()(const XsDataPacket &packet, rclcpp::Time timestamp)
@@ -86,7 +89,14 @@ struct TransformPublisher : public PacketCallback
 
             tf.header.stamp = timestamp;
             tf.header.frame_id = "world";
-            tf.child_frame_id = frame_id;
+            if(ns=="")
+            {
+                tf.child_frame_id = frame_id;
+            }
+            else
+            {
+                tf.child_frame_id = ns +"/"+ frame_id;
+            }
             tf.transform.translation.x = 0.0;
             tf.transform.translation.y = 0.0;
             tf.transform.translation.z = 0.0;
