@@ -175,11 +175,19 @@ void DynamixelController::publish_timer(const std::chrono::milliseconds timeout)
       std::string ns= this->get_namespace();
       ns = ns.erase(0,1);
 
-      joint_state_msg_.header.frame_id = ns +"/"+ "base_link";
       joint_state_msg_.header.stamp = now;
-
-      joint_state_msg_.name.push_back(ns +"/"+ "wheel_left_joint");
-      joint_state_msg_.name.push_back(ns +"/"+ "wheel_right_joint");
+      if(ns=="")
+      {
+          joint_state_msg_.header.frame_id = "base_link";
+          joint_state_msg_.name.push_back("wheel_left_joint");
+          joint_state_msg_.name.push_back("wheel_right_joint");
+      }
+      else
+      {
+          joint_state_msg_.header.frame_id = ns +"/"+ "base_link";
+          joint_state_msg_.name.push_back(ns +"/"+ "wheel_left_joint");
+          joint_state_msg_.name.push_back(ns +"/"+ "wheel_right_joint");
+      }
 
       joint_state_msg_.position.push_back(DEG_PULSE_TO_RAD * position[0]);  // left
       joint_state_msg_.position.push_back(DEG_PULSE_TO_RAD * position[1]);  // right -> bugs!!!
