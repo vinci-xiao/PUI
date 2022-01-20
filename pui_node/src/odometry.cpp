@@ -15,7 +15,7 @@ Odometry::Odometry(
   wheels_separation_(wheels_separation),
   wheels_radius_(wheels_radius),
   use_imu_(false),
-  publish_tf_(false),
+  publish_tf_(true),
   imu_angle_(0.0f)
 {
   RCLCPP_INFO(nh_->get_logger(), "Init Odometry");
@@ -23,7 +23,7 @@ Odometry::Odometry(
   nh_->declare_parameter<std::string>("odometry.frame_id", "odom");
   nh_->declare_parameter<std::string>("odometry.child_frame_id", "base_footprint");
   nh_->declare_parameter<bool>("odometry.use_imu", false);
-  nh_->declare_parameter<bool>("odometry.publish_tf", false);
+  nh_->declare_parameter<bool>("odometry.publish_tf", true);
 
   nh_->get_parameter("odometry.use_imu", use_imu_);
   nh_->get_parameter("odometry.publish_tf", publish_tf_);
