@@ -2,13 +2,27 @@
 
 ## [Create PUI workspace](https://docs.ros.org/en/foxy/Tutorials/Workspace/Creating-A-Workspace.html)
 ```sh
-mkdir -p ~/mih_ws/src && cd ~/mih_ws 
+mkdir -p ~/pui_ws/src && cd ~/pui_ws 
 git clone https://github.com/vinci-xiao/PUI.git -b foxy src
 rosdep install -i --from-path src --rosdistro foxy -y
 colcon build
 ```
 
+Common question:
+#### Could not get lock /var/lib/dpkg/lock
+```sh
+sudo rm /var/cache/apt/archives/lock
+sudo rm /var/lib/dpkg/lock
+```
+
 ## cheat-sheet
+
+### Compile and Run!
+```
+. install/setup.bash
+export TURTLEBOT3_MODEL=burger
+ros2 launch pui_launcher pui_brinup.launch.py
+```
 
 ### Compile specific pkg
 ```
