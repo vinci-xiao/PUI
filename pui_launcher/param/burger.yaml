@@ -1,4 +1,4 @@
-pui_1:
+pui_1:    # <------------------- CHANGE THIS!
   turtlebot3_node:
     ros__parameters:
 
@@ -28,7 +28,7 @@ pui_1:
 
         sonar: false
 
-pui_1:
+pui_1:    # <------------------- CHANGE THIS!
   diff_drive_controller:
     ros__parameters:
 

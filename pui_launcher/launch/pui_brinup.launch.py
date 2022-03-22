@@ -20,7 +20,7 @@ def generate_launch_description():
     tb3_param_dir = LaunchConfiguration(
         'tb3_param_dir',
         default=os.path.join(
-            get_package_share_directory('pui_launcher'),  # <--- CHANGE THIS!
+            get_package_share_directory('pui_launcher'),  
             'param',
             TURTLEBOT3_MODEL + '.yaml'))
 
@@ -70,7 +70,7 @@ def generate_launch_description():
         Node(
             package='turtlebot3_node',
             executable='turtlebot3_ros',
-            node_namespace='pui_1',  # <------------------- ADD THIS!
+            node_namespace='pui_1',  # <---------------- CHANGE THIS!
             parameters=[tb3_param_dir],
             arguments=['-i', usb_port],
             output='screen'),

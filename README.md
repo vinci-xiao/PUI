@@ -6,6 +6,43 @@ mkdir -p ~/pui_ws/src && cd ~/pui_ws
 git clone https://github.com/vinci-xiao/PUI.git -b foxy src
 rosdep install -i --from-path src --rosdistro foxy -y
 colcon build
+source /install/bash.rc
+```
+
+## [Change Namespace for Multi-Robot](https://discourse.ros.org/t/giving-a-turtlebot3-a-namespace-for-multi-robot-experiments/10756)
+
+1. Modify pui_launcher/launch/pui_brinup.launch.py
+```sh
+Node(
+    package='turtlebot3_node',
+    executable='turtlebot3_ros',
+    node_namespace='pui_1',  # <---------------- CHANGE THIS!
+    parameters=[tb3_param_dir],
+    arguments=['-i', usb_port],
+    output='screen'),
+])
+```
+
+2. Modify pui_launcher/launch/turtlebot3_state_publisher.launch.py
+```sh
+Node(
+    package='robot_state_publisher',
+    executable='robot_state_publisher',
+    node_namespace='pui_1',  # <------------------- CHANGE THIS!
+    output='screen',
+    parameters=[rsp_params, {'use_sim_time': use_sim_time}])
+    ])
+```
+
+3. Modify pui_launcher/param/burger.yaml
+```sh
+pui_1:    # <------------------- CHANGE THIS!
+  turtlebot3_node:
+    ros__parameters:
+
+pui_1:    # <------------------- CHANGE THIS!
+  diff_drive_controller:
+    ros__parameters:
 ```
 
 Common question:
@@ -17,17 +54,18 @@ sudo rm /var/lib/dpkg/lock
 
 ## cheat-sheet
 
-### Compile and Run!
+#### Compile and Run!
 ```
 . install/setup.bash
 export TURTLEBOT3_MODEL=burger
 ros2 launch pui_launcher pui_brinup.launch.py
 ```
 
-### Compile specific pkg
+#### Compile specific pkg
 ```
 ros2 pkg create --build-type ament_cmake <-package name->
 ```
+
 #### collect data
 ```
 ros2 bag record -a -o bag_name
@@ -45,12 +83,12 @@ rviz2
 ## PUI hardware configuration
 *[/pui_bringup/21-pui.rules] - hardware rules permission for joy and dynamixel controll
 
-### Find USB devics info 
+#### Find USB devics info 
 ```
 udevadm info -a -n /dev/ttyUSB0 | grep '{serial}'
 udevadm info -a -n /dev/ttyUSB0 | grep '{devpath}'
 ```
-### Implant hardware rules
+#### Apply hardware rules
 ```
 sudo cp *.rules /etc/udev/rules.d/
 sudo udevadm control --reload-rules
