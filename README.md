@@ -58,6 +58,7 @@ sudo rm /var/lib/dpkg/lock
 ```
 . install/setup.bash
 export TURTLEBOT3_MODEL=burger
+export LDS_MODEL=LDS-01
 ros2 launch pui_launcher pui_brinup.launch.py
 ```
 
