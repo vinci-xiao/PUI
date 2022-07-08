@@ -50,7 +50,7 @@ def generate_launch_description():
 
         DeclareLaunchArgument(
             'map_file',
-            default_value=os.path.join(bringup_dir, 'map', 'hector_fixed.yaml'),
+            default_value=os.path.join(bringup_dir, 'map', 'lobby.yaml'),
             description='Full path to map yaml file to load'),
 
         DeclareLaunchArgument(
@@ -114,7 +114,7 @@ def generate_launch_description():
             package='tf2_ros',
             executable='static_transform_publisher',
             name='world2map',
-            arguments = ["1.52", "1.68", "0", "0", "0", "-1.66", "1", "world", "map"],
+            arguments = ["0", "0", "0", "0", "0", "0.02", "1", "world", "map"],
             output='screen'),   
 
         # TF (map -> velodyne_link) 
