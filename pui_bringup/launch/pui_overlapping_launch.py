@@ -88,13 +88,6 @@ def generate_launch_description():
             parameters=[{'yaml_filename': map_yaml_file}]
             ),
 
-        # Trilateration
-        Node(
-            package='pui_uwb',
-            executable='trilateration_mse',
-            name='trilateration_mse',
-            output='screen'),   
-
         # UWB markers
         Node(
             package='pui_markers',
@@ -102,6 +95,13 @@ def generate_launch_description():
             name='uwb_marker',
             output='screen'),    
 
+        # Trilateration
+        Node(
+            package='pui_uwb',
+            executable='trilateration_mse',
+            name='trilateration_mse',
+            output='screen'),   
+            
         # Visualize tag_path 
         Node(
             package='pui_markers',

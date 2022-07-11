@@ -61,13 +61,13 @@ private:
         RCLCPP_INFO(this->get_logger(), "Listening static tf...");
 
         anchor_0_tf = tf_buffer_->lookupTransform(
-        "base_link","anchor_0_link", now, 1s);
+        "world","anchor_0_link", now, 1s);
 
         anchor_1_tf = tf_buffer_->lookupTransform(
-        "base_link","anchor_1_link", now, 1s);
+        "world","anchor_1_link", now, 1s);
     
         anchor_2_tf = tf_buffer_->lookupTransform(
-        "base_link","anchor_2_link", now, 1s);
+        "world","anchor_2_link", now, 1s);
 
         x1_ = anchor_0_tf.transform.translation.x;
         y1_ = anchor_0_tf.transform.translation.y;

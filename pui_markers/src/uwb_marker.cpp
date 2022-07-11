@@ -3,6 +3,9 @@
 #include "rclcpp/rclcpp.hpp"
 #include "visualization_msgs/msg/marker.hpp"
 #include "geometry_msgs/msg/pose.hpp"
+#include "geometry_msgs/msg/transform_stamped.hpp"
+#include "tf2_msgs/msg/tf_message.hpp"
+#include <tf2_ros/static_transform_broadcaster.h>
 
 using namespace std::chrono_literals;
 
@@ -16,6 +19,7 @@ public:
     MarkerUWB()
     : Node("uwb_marker")
     {
+        satic_publisher_ = std::make_shared<tf2_ros::StaticTransformBroadcaster>(this);
         publisher_ = this->create_publisher<visualization_msgs::msg::Marker>("visualization_marker", 3);
         subscription_ = this->create_subscription<geometry_msgs::msg::Pose>(
         "tag_position", 10, std::bind(&MarkerUWB::tag_callback, this, std::placeholders::_1));
@@ -30,7 +34,7 @@ private:
 
         // anchor_0
         visualization_msgs::msg::Marker anchor_0;
-        anchor_0.header.frame_id = "/world";
+        anchor_0.header.frame_id = "world";
         anchor_0.header.stamp = rclcpp::Clock().now();
         anchor_0.ns = "uwb_marker";
         anchor_0.id = 0;
@@ -54,7 +58,7 @@ private:
 
         // anchor_1
         visualization_msgs::msg::Marker anchor_1;
-        anchor_1.header.frame_id = "/world";
+        anchor_1.header.frame_id = "world";
         anchor_1.header.stamp = rclcpp::Clock().now();
         anchor_1.ns = "uwb_marker";
         anchor_1.id = 1;
@@ -78,7 +82,7 @@ private:
 
         // anchor_2
         visualization_msgs::msg::Marker anchor_2;
-        anchor_2.header.frame_id = "/world";
+        anchor_2.header.frame_id = "world";
         anchor_2.header.stamp = rclcpp::Clock().now();
         anchor_2.ns = "uwb_marker";
         anchor_2.id = 2;
@@ -103,6 +107,35 @@ private:
         publisher_->publish(anchor_0);
         publisher_->publish(anchor_1);
         publisher_->publish(anchor_2);
+
+        geometry_msgs::msg::TransformStamped an0_tf;
+        geometry_msgs::msg::TransformStamped an1_tf;
+        geometry_msgs::msg::TransformStamped an2_tf;
+
+        an0_tf.header.stamp = anchor_0.header.stamp;
+        an0_tf.header.frame_id = "world";
+        an0_tf.child_frame_id = "anchor_0_link";
+        an0_tf.transform.translation.x = anchor_0.pose.position.x;
+        an0_tf.transform.translation.y = anchor_0.pose.position.y;
+        an0_tf.transform.translation.z = anchor_0.pose.position.z;
+
+        an1_tf.header.stamp = anchor_1.header.stamp;
+        an1_tf.header.frame_id = "world";
+        an1_tf.child_frame_id = "anchor_1_link";
+        an1_tf.transform.translation.x = anchor_1.pose.position.x;
+        an1_tf.transform.translation.y = anchor_1.pose.position.y;
+        an1_tf.transform.translation.z = anchor_1.pose.position.z;
+
+        an2_tf.header.stamp = anchor_2.header.stamp;
+        an2_tf.header.frame_id = "world";
+        an2_tf.child_frame_id = "anchor_2_link";
+        an2_tf.transform.translation.x = anchor_2.pose.position.x;
+        an2_tf.transform.translation.y = anchor_2.pose.position.y;
+        an2_tf.transform.translation.z = anchor_2.pose.position.z;
+
+        satic_publisher_->sendTransform(an0_tf);
+        satic_publisher_->sendTransform(an1_tf);
+        satic_publisher_->sendTransform(an2_tf);
     }
     void tag_callback(geometry_msgs::msg::Pose::SharedPtr tag) 
     {
@@ -139,6 +172,7 @@ private:
         anchor_setting();
     }
     rclcpp::TimerBase::SharedPtr timer_;
+    std::shared_ptr<tf2_ros::StaticTransformBroadcaster> satic_publisher_;
     rclcpp::Publisher<visualization_msgs::msg::Marker>::SharedPtr publisher_;
     rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr subscription_;
 
