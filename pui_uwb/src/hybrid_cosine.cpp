@@ -19,7 +19,7 @@
 #include <tf2_ros/buffer.h>
 #include "tf2_msgs/msg/tf_message.hpp"
 
-#include "pui_msgs/msg/multi_range.hpp"
+#include "evpi_interfaces/msg/multi_range.hpp"
 
 using std::placeholders::_1;
 using namespace std::chrono_literals;
@@ -41,7 +41,7 @@ public:
     : Node("hybrid_cosine")
     {
         tag_publisher_ = this->create_publisher<geometry_msgs::msg::Pose>("tag_position", 3);
-        uwb_subscriber_ = this->create_subscription<pui_msgs::msg::MultiRange>(
+        uwb_subscriber_ = this->create_subscription<evpi_interfaces::msg::MultiRange>(
             "/uwb_range", 5, std::bind(&HybridCosine::uwb_callback, this, std::placeholders::_1));
         tf_buffer_ = std::make_unique<tf2_ros::Buffer>(this->get_clock());
         transform_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
@@ -131,7 +131,7 @@ private:
             return angle_alpha;
         }
     }
-    void uwb_callback(pui_msgs::msg::MultiRange::SharedPtr msg) 
+    void uwb_callback(evpi_interfaces::msg::MultiRange::SharedPtr msg) 
     {
         static bool is_first_time = true;
         static auto p = geometry_msgs::msg::Pose();
@@ -213,7 +213,7 @@ private:
         }
     }
     rclcpp::Publisher<geometry_msgs::msg::Pose>::SharedPtr tag_publisher_;
-    rclcpp::Subscription<pui_msgs::msg::MultiRange>::SharedPtr uwb_subscriber_;
+    rclcpp::Subscription<evpi_interfaces::msg::MultiRange>::SharedPtr uwb_subscriber_;
     std::shared_ptr<tf2_ros::TransformListener> transform_listener_{nullptr};
     std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
     rclcpp::Publisher<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr initpose_publisher_;

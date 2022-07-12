@@ -24,19 +24,19 @@ find_package(geometry_msgs REQUIRED)
 find_package(tf2_msgs REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
-find_package(pui_msgs REQUIRED)   # for customed msg (MultiRange)
+find_package(evpi_interfaces REQUIRED)   # for customed msg (MultiRange)
 
 add_executable(trilateration_mse src/trilateration_mse.cpp)
-ament_target_dependencies(trilateration_mse rclcpp std_msgs geometry_msgs pui_msgs Eigen3 tf2_msgs tf2 tf2_ros)
+ament_target_dependencies(trilateration_mse rclcpp std_msgs geometry_msgs evpi_interfaces Eigen3 tf2_msgs tf2 tf2_ros)
 
 add_executable(trilateration_mse_3d src/trilateration_mse_3d.cpp)
-ament_target_dependencies(trilateration_mse_3d rclcpp std_msgs geometry_msgs pui_msgs Eigen3 tf2_msgs tf2 tf2_ros)
+ament_target_dependencies(trilateration_mse_3d rclcpp std_msgs geometry_msgs evpi_interfaces Eigen3 tf2_msgs tf2 tf2_ros)
 
 add_executable(following_node src/following_node.cpp)
-ament_target_dependencies(following_node rclcpp std_msgs geometry_msgs pui_msgs)
+ament_target_dependencies(following_node rclcpp std_msgs geometry_msgs evpi_interfaces)
 
 add_executable(hybrid_cosine src/hybrid_cosine.cpp)
-ament_target_dependencies(hybrid_cosine rclcpp std_msgs geometry_msgs pui_msgs Eigen3 tf2_msgs tf2 tf2_ros)
+ament_target_dependencies(hybrid_cosine rclcpp std_msgs geometry_msgs evpi_interfaces Eigen3 tf2_msgs tf2 tf2_ros)
 
 install(TARGETS
   trilateration_mse

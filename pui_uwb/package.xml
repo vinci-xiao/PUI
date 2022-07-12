@@ -12,7 +12,7 @@
   <depend>rclcpp</depend>
   <depend>std_msgs</depend>  
   <depend>geometry_msgs</depend>  
-  <depend>pui_msgs</depend>  
+  <depend>evpi_interfaces</depend>  
   <depend>tf2</depend>
   <depend>tf2_ros</depend>
 

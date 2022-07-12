@@ -36,8 +36,8 @@ int led3 = LEDB;
 
 #include <std_msgs/msg/int32.h>
 #include <std_msgs/msg/float32.h>
-#include <pui_msgs/msg/multi_range.h>
-pui_msgs__msg__MultiRange range_msg_;
+#include <evpi_interfaces/msg/multi_range.h>
+evpi_interfaces__msg__MultiRange range_msg_;
 
 
 rcl_publisher_t publisher;

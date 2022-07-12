@@ -13,7 +13,7 @@
 
 #include "tf2_msgs/msg/tf_message.hpp"
 
-#include "pui_msgs/msg/multi_range.hpp"
+#include "evpi_interfaces/msg/multi_range.hpp"
 
 #include <chrono>
 #include <memory>
@@ -41,7 +41,7 @@ public:
     : Node("trilateration_mse")
     {
         tag_publisher_ = this->create_publisher<geometry_msgs::msg::Pose>("tag_position", 10);
-        uwb_subscriber_ = this->create_subscription<pui_msgs::msg::MultiRange>(
+        uwb_subscriber_ = this->create_subscription<evpi_interfaces::msg::MultiRange>(
             "uwb_range", 10, std::bind(&TrilaterationMSE::uwb_callback, this, std::placeholders::_1));
         tf_buffer_ = std::make_unique<tf2_ros::Buffer>(this->get_clock());
         transform_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
@@ -121,7 +121,7 @@ private:
 
         return pose;
     }  
-    void uwb_callback(pui_msgs::msg::MultiRange::SharedPtr msg) 
+    void uwb_callback(evpi_interfaces::msg::MultiRange::SharedPtr msg) 
     {
         auto p = geometry_msgs::msg::Pose();
         static double r1,r2,r3 = 0;
@@ -135,7 +135,7 @@ private:
         tag_publisher_->publish(p);
     }
     rclcpp::Publisher<geometry_msgs::msg::Pose>::SharedPtr tag_publisher_;
-    rclcpp::Subscription<pui_msgs::msg::MultiRange>::SharedPtr uwb_subscriber_;
+    rclcpp::Subscription<evpi_interfaces::msg::MultiRange>::SharedPtr uwb_subscriber_;
     std::shared_ptr<tf2_ros::TransformListener> transform_listener_{nullptr};
     std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
 };

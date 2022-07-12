@@ -3,7 +3,7 @@
 #include <algorithm>
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
-#include "pui_msgs/msg/multi_range.hpp"
+#include "evpi_interfaces/msg/multi_range.hpp"
 #include "geometry_msgs/msg/pose.hpp"
 
 using namespace std;
@@ -78,7 +78,7 @@ public:
     : Node("following_node")
     {
         tag_pub_ = this->create_publisher<geometry_msgs::msg::Pose>("tag_position", 5);
-        anchor_sub_ = this->create_subscription<pui_msgs::msg::MultiRange>(
+        anchor_sub_ = this->create_subscription<evpi_interfaces::msg::MultiRange>(
         "/uwb_range", 5, std::bind(&FollowingNode::topic_callback, this, std::placeholders::_1));
         
         get_parameters();
@@ -120,7 +120,7 @@ public:
     }
 
 private:
-    void topic_callback(pui_msgs::msg::MultiRange::SharedPtr msg) 
+    void topic_callback(evpi_interfaces::msg::MultiRange::SharedPtr msg) 
     {
         auto p = geometry_msgs::msg::Pose();
         static double r1,r2,r3, r4 = 0;
@@ -146,7 +146,7 @@ private:
         }
     }
     rclcpp::Publisher<geometry_msgs::msg::Pose>::SharedPtr tag_pub_;
-    rclcpp::Subscription<pui_msgs::msg::MultiRange>::SharedPtr anchor_sub_;
+    rclcpp::Subscription<evpi_interfaces::msg::MultiRange>::SharedPtr anchor_sub_;
 };
 
 int main(int argc, char** argv)
