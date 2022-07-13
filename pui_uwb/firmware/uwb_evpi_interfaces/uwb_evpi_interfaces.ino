@@ -24,7 +24,7 @@ MovingAverage A1_filter(3);
 MovingAverage A2_filter(3);
 MovingAverage A3_filter(3);
 
-double margin = 20.0;
+double margin = 5.0;
 
 // ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyACM0 -b 115200 -v 6
 
